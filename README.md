@@ -152,7 +152,7 @@ csv_dir = [
 
 &emsp;生成的WAV文件命名如下：
 
-&emsp;&emsp;{room}\_{wav_name}\_{speech}\_{noise}_{SNR}dB.wav
+&emsp;{room}\_{wav_name}\_{speech}\_{noise}_{SNR}dB.wav
 
 &emsp;&emsp;room：房间名，如room1，room2
 
@@ -170,19 +170,19 @@ csv_dir = [
 
 对应`pt_generation`
 
-修改**`thread_process.py`** 28-30行的参数
+&emsp;修改**`thread_process.py`** 28-30行的参数
 
-​	dir_str_head：第1步生成的{output_dir}/Dev/Speech/
+&emsp;&emsp;dir_str_head：第1步生成的{output_dir}/Dev/Speech/
 
-​	save_dir_head：要保存的pt文件路径
+&emsp;&emsp;save_dir_head：要保存的pt文件路径
 
-​	csv_path_head：第1步生成的{output_dir}/Dev/Speech/
+&emsp;&emsp;csv_path_head：第1步生成的{output_dir}/Dev/Speech/
 
-修改
+&emsp;修改
 
-​	dir_str、save_dir+各个房间
+&emsp;&emsp;dir_str、save_dir+各个房间
 
-​	csv_dir+各个房间+路径下的csv文件
+&emsp;&emsp;csv_dir+各个房间+路径下的csv文件
 
 例子：
 
