@@ -41,8 +41,11 @@ RIR
 对应`wav_generation/NoNoise`
 
 1.1 修改`gen_convwav_shell.py`的参数：
+
 xls_file：RIR对应的xls文件
+
 rir_dir：RIR路径地址
+
 output_dir：wav文件输出路径
 gen_convwav_shell：生成的sh文件
 如要修改干语料，修改option.py下的参数：
