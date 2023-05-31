@@ -42,19 +42,19 @@ RIR
 
 1.1 修改**`gen_convwav_shell.py`**的参数：
 
-​		xls_file：RIR对应的xls文件
+$\qquad$$\qquad$xls_file：RIR对应的xls文件
 
-​		rir_dir：RIR路径地址
+$\qquad$$\qquad$rir_dir：RIR路径地址
 
-​		output_dir：wav文件输出路径
+$\qquad$$\qquad$output_dir：wav文件输出路径
 
-​		gen_convwav_shell：生成的sh文件
+$\qquad$$\qquad$gen_convwav_shell：生成的sh文件
 
-​	如要修改干语料，修改option.py下的参数：
+$\qquad$$\qquad$如要修改干语料，修改option.py下的参数：
 
-​		Speaker_root：干语料路径
+$\qquad$$\qquad$Speaker_root：干语料路径
 
-​		Speaker_txt：干语料txt
+$\qquad$$\qquad$Speaker_txt：干语料txt
 
 1.2 运行`python gen_convwav_shell.py`，会在output_dir下生成csv文件
 
