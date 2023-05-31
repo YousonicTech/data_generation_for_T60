@@ -42,19 +42,19 @@ RIR
 
 1.1 修改**`gen_convwav_shell.py`**的参数：
 
-&emsp; xls_file：RIR对应的xls文件
+&emsp;&emsp; xls_file：RIR对应的xls文件
 
-&emsp; rir_dir：RIR路径地址
+&emsp;&emsp; rir_dir：RIR路径地址
 
-&emsp; output_dir：wav文件输出路径
+&emsp;&emsp; output_dir：wav文件输出路径
 
-&emsp; gen_convwav_shell：生成的sh文件
+&emsp;&emsp; gen_convwav_shell：生成的sh文件
 
-​	如要修改干语料，修改option.py下的参数：
+&emsp;如要修改干语料，修改option.py下的参数：
 
-&emsp; Speaker_root：干语料路径
+&emsp;&emsp; Speaker_root：干语料路径
 
-&emsp; Speaker_txt：干语料txt
+&emsp;&emsp; Speaker_txt：干语料txt
 
 1.2 运行`python gen_convwav_shell.py`，会在output_dir下生成csv文件
 
@@ -80,11 +80,11 @@ RIR
 
 修改**`thread_process.py`** 28-30行的参数
 
-&emsp; dir_str_head：第1步生成的{output_dir}/Dev/Speech/
+&emsp;&emsp; dir_str_head：第1步生成的{output_dir}/Dev/Speech/
 
-&emsp; save_dir_head：要保存的pt文件路径
+&emsp;&emsp; save_dir_head：要保存的pt文件路径
 
-&emsp; csv_path_head：第1步生成的{output_dir}/Dev/Speech/
+&emsp;&emsp; csv_path_head：第1步生成的{output_dir}/Dev/Speech/
 
 修改
 
