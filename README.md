@@ -44,17 +44,17 @@ RIR
 
 &emsp; xls_file：RIR对应的xls文件
 
-​		rir_dir：RIR路径地址
+&emsp; rir_dir：RIR路径地址
 
-​		output_dir：wav文件输出路径
+&emsp; output_dir：wav文件输出路径
 
-​		gen_convwav_shell：生成的sh文件
+&emsp; gen_convwav_shell：生成的sh文件
 
 ​	如要修改干语料，修改option.py下的参数：
 
-​		Speaker_root：干语料路径
+&emsp; Speaker_root：干语料路径
 
-​		Speaker_txt：干语料txt
+&emsp; Speaker_txt：干语料txt
 
 1.2 运行`python gen_convwav_shell.py`，会在output_dir下生成csv文件
 
@@ -66,11 +66,11 @@ RIR
 
 {room}\_{wav_name}\_{speech}_N_NdB.wav
 
-​				room为房间名，如room1，room2
+&emsp; room为房间名，如room1，room2
 
-​				rir_wav_name为具体的wav文件名，如room1-ch1、 room1-ch2
+&emsp; rir_wav_name为具体的wav文件名，如room1-ch1、 room1-ch2
 
-​				speech为干语料
+&emsp; speech为干语料
 
 ### 2. 生成pt文件
 
@@ -80,17 +80,17 @@ RIR
 
 修改**`thread_process.py`** 28-30行的参数
 
-​	dir_str_head：第1步生成的{output_dir}/Dev/Speech/
+&emsp; dir_str_head：第1步生成的{output_dir}/Dev/Speech/
 
-​	save_dir_head：要保存的pt文件路径
+&emsp; save_dir_head：要保存的pt文件路径
 
-​	csv_path_head：第1步生成的{output_dir}/Dev/Speech/
+&emsp; csv_path_head：第1步生成的{output_dir}/Dev/Speech/
 
 修改
 
-​	dir_str、save_dir+各个房间
+&emsp; dir_str、save_dir+各个房间
 
-​	csv_dir+各个房间+路径下的csv文件
+&emsp; csv_dir+各个房间+路径下的csv文件
 
 例子：
 
