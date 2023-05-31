@@ -78,7 +78,7 @@ RIR
 
 对应`pt_generation`
 
-修改**`thread_process.py`** 28-30行的参数
+&emsp;修改**`thread_process.py`** 28-30行的参数
 
 &emsp;&emsp; dir_str_head：第1步生成的{output_dir}/Dev/Speech/
 
