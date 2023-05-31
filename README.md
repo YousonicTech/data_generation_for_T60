@@ -62,15 +62,15 @@ RIR
 
 
 
-生成的WAV文件命名如下：
+&emsp;生成的WAV文件命名如下：
 
-{room}\_{wav_name}\_{speech}_N_NdB.wav
+&emsp;{room}\_{wav_name}\_{speech}_N_NdB.wav
 
-&emsp; room为房间名，如room1，room2
+&emsp;&emsp; room为房间名，如room1，room2
 
-&emsp; rir_wav_name为具体的wav文件名，如room1-ch1、 room1-ch2
+&emsp;&emsp; rir_wav_name为具体的wav文件名，如room1-ch1、 room1-ch2
 
-&emsp; speech为干语料
+&emsp;&emsp; speech为干语料
 
 ### 2. 生成pt文件
 
