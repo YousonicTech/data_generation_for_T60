@@ -96,7 +96,7 @@ def genACECorpusDataset(params):
             #time.strftime("%d:%m:%Y")
             #resultsFileName = micConfigCorpusFolder+'_'+params.testName +'_results.txt'
             dt = datetime.datetime.now()
-            resultsFileName = os.path.join(micConfigCorpusFolder,"%s_results.csv" %(dt.strftime("%Y%m%dT%H%M%S")))
+            resultsFileName = os.path.join(micConfigCorpusFolder,"results.csv"))
             print("resultFilename:",resultsFileName)
             resultsHandle = open(resultsFileName, "a", newline="")
             csv_writer = csv.writer(resultsHandle)
@@ -106,7 +106,7 @@ def genACECorpusDataset(params):
             if strcmp(params.startOffsetDate, ''):
                 print('Timestamp for existing file to append not specified.  Should be in format yyyymmddThhmmss')
                 # raise ValueEroor('Timestamp for existing file to append not specified.  Should be in format yyyymmddThhmmss')
-            resultsFileName = os.path.join(micConfigCorpusFolder,"%s_results.csv" %(dt.strftime("%Y%m%dT%H%M%S")))
+            resultsFileName = os.path.join(micConfigCorpusFolder,"results.csv"))
             print("resultFilename:",resultsFileName)
 
             resultsHandle = open(resultsFileName, "w", newline="")
