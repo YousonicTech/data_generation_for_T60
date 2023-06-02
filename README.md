@@ -62,7 +62,7 @@ RIR
 
 &emsp;&emsp; Speaker_txt：干语料txt
 
-1.2 运行`python gen_convwav_shell.py`，会在output_dir下生成csv文件
+1.2 运行`python gen_convwav_shell.py`，会在output_dir下生成csv文件，并生成sh文件
 
 1.3 随后运行生成的sh文件（即1.1中的参数gen_convwav_shell），会在output_dir文件夹下生成RIR\*speech的wav文件Dev/Speech/{room}/*.wav
 
@@ -125,7 +125,7 @@ RIR
 
 &emsp;&emsp;noise_dir：noise的txt目录
 
-1.2 运行`python gen_convwav_shell.py`，会在output_dir下生成csv文件，生成sh文件
+1.2 运行`python gen_convwav_shell.py`，会在output_dir下生成csv文件，并生成sh文件
 
 1.3 随后运行生成的sh文件（即1.1中的参数gen_convwav_shell），会在output_dir文件夹下生成RIR\*speech的wav文件Dev/Speech/{room}/*.wav
 
