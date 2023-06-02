@@ -11,7 +11,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--xls_file", default="/data1/zdm/code/gen_test/HYBL_test_RIR/hybl_total.xls", type=str)
 parser.add_argument('--rir_dir', default="/data1/zdm/code/gen_test/HYBL_test_RIR/", type=str)
 parser.add_argument("--output_dir", default="/data1/zdm/code/gen_test/Output/", type=str)
-parser.add_argument("--gen_convwav_shell", default='./test.sh', type=str)
+parser.add_argument("--gen_convwav_shell", default='/data1/zdm/code/gen_test/sh/test.sh', type=str)
 
 # 创建解析器
 # ArgumentParser 对象包含将命令行解析成 Python 数据类型所需的全部信息。
