@@ -90,7 +90,7 @@ RIR
 
 &emsp;&emsp; dir_str、save_dir+各个房间
 
-&emsp;&emsp; csv_dir+各个房间+路径下的csv文件
+&emsp;&emsp; csv_dir+各个房间+路径下的csv文件（现已全部为results.csv）
 
 例子：
 
@@ -182,7 +182,7 @@ csv_dir = [
 
 &emsp;&emsp;dir_str、save_dir+各个房间
 
-&emsp;&emsp;csv_dir+各个房间+路径下的csv文件
+&emsp;&emsp;csv_dir+各个房间+路径下的csv文件（现已全部为results.csv）
 
 例子：
 
