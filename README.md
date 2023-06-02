@@ -92,7 +92,7 @@ RIR
 
 &emsp;&emsp; csv_path_root：第1步生成的{output_dir}/Dev/Speech/
 
-读取wav_root下所有文件夹名称，在save_pt_root下生成对应的pt
+读取wav_root下所有房间文件夹名称，在save_pt_root下生成对应的pt
 
 
 生成的pt文件格式与wav一致，后面-0表示通道
@@ -159,6 +159,6 @@ RIR
 
 &emsp;&emsp;csv_path_root：第1步生成的{output_dir}/Dev/Speech/
 
-读取wav_root下所有文件夹名称，在save_pt_root下生成对应的pt
+读取wav_root下所有房间文件夹名称，在save_pt_root下生成对应的pt
 
 生成的pt文件格式与wav一致，后面-0表示通道
