@@ -44,18 +44,13 @@ def genACECorpusDataset(params):
 
     nFreqBands = len(freqBands)
 
-    #speechFolder = os.path.join(params.corpusInputFolderRoot,ACECorpusData.ACE_DATA_EXT_SPEECH)
-    #print("speechFolder:",speechFolder)
-
-    # Generate the output folder root name
-    # corpusFolder = [params.corpusOutputFolderRoot,params.datasetName, '/', ACECorpusData.ACE_DATA_EXT_SPEECH]
     a = params.corpusOutputFolderRoot
     b = params.datasetName
     c = ACECorpusData.ACE_DATA_EXT_SPEECH
     corpusFolder = os.path.join(params.corpusOutputFolderRoot,params.datasetName,ACECorpusData.ACE_DATA_EXT_SPEECH)
     #corpusFolder = params.corpusOutputFolderRoot+params.datasetName+'/'+ACECorpusData.ACE_DATA_EXT_SPEECH
     if not os.path.exists(corpusFolder):
-        # raise ValueEroor('Corpus root folder %s does not exist.  Creating.'%corpusFolder)
+
         os.makedirs(corpusFolder)
 
     #Do the convolving of the files
@@ -238,11 +233,10 @@ def genACECorpusDataset(params):
             for f2 in line2:
                 time_timit = time.time()
                 wave_file = f2.split("\n")[0]
-                # speaker_root = '/data2/cql/code/augu_data/test_concat_same_people_wav'
-                #speaker_root = os.path.dirname(args.Speaker_txt)
+                
                 speaker_root = args.Speaker_root
                 wave_file = os.path.join(speaker_root, wave_file)
-                #wave_file = '/data2/cql/code/augu_data/train_data_TIMIT/DR4_FCAG0_SX63.WAV.wav'
+                
                 y, sr = librosa.load(wave_file, sr = params.fs,mono=False)
                 print("加载timit时间{}".format(time.time()-time_timit))
                 
@@ -264,14 +258,10 @@ def genACECorpusDataset(params):
                 if "_" in params.talkerCodeName:
                         raise ValueError("speech命名不允许包含下划线")
                 
-                # params.utterTypeName = "TIMIT"
-                # params.talkerName = save_name
-                #params.utterCodeName = "TIMIT"
                 results["fullUtterOutFileName"] = os.path.join(micConfigCorpusFolder, '%s_%s_%s_N_NdB.wav'%(
                         params.corpusMicConfig,
                         params.roomCodeName,
                         params.talkerCodeName,
-                        # params.utterTypeName
                         ))
                 time_write = time.time()
                 sf.write(results["fullUtterOutFileName"],revUtter,params.fs)

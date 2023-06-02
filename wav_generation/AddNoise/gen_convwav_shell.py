@@ -14,9 +14,6 @@ parser.add_argument("--output_dir", default="/data1/zdm/code/T60_data_generation
 parser.add_argument("--gen_convwav_shell", default='./test.sh', type=str)
 parser.add_argument("--log",default="./log/",type=str)
 
-# 创建解析器
-# ArgumentParser 对象包含将命令行解析成 Python 数据类型所需的全部信息。
-# path = r"C:\Users\17579\Desktop\新建文件夹\TAE_Train\Data_Aug\Step_1\test_1.csv"
 
 def excel_to_csv(file):
     resultsFileName = file.replace(".xls", '.csv')  # "02_06_val_data.csv"
@@ -33,14 +30,7 @@ def excel_to_csv(file):
                 "FB T60 AHM:", "FB T30 ISO:", "FB T20 ISO:", "FB T60 AHM Mean (Ch):", "FB T30 ISO Mean (Ch):",
                 "FB T20 ISO Mean (Ch):",
                 "DRR direct +:", "DRR direct -:"]
-    # headLine = ["Test ID:", "Ver:", "fs:", "Room:",  "Session ID:", "Mic Pos:",
-    #             "Source Pos:", "Config:", "Rec Type:", "RIR:", "Freq band:", "Centre freq:",
-    #             "Channel:", "DRR:", "DRR Mean (Ch):", "T60 AHM:", "T30 ISO:", "T20 ISO:",
-    #             "T60 AHM Mean (Ch):", "T30 ISO Mean (Ch):", "T20 ISO Mean (Ch):", "ISO AHM Ints:", "FB DRR :",
-    #             "FB DRR Mean (Ch):",
-    #             "FB T60 AHM:", "FB T30 ISO:", "FB T20 ISO:", "FB T60 AHM Mean (Ch):", "FB T30 ISO Mean (Ch):",
-    #             "FB T20 ISO Mean (Ch):",
-    #             "DRR direct +:", "DRR direct -:"]
+
 
     csv_writer.writerow(headLine)
 
@@ -117,40 +107,14 @@ def excel_to_csv(file):
                     if fre_band == 30:
                         info[15] = 0
                     csv_writer.writerow(info)
-            # if j==len(values)-1:
-            #      copy_info[10] = copy_info[10] + 1 #中心频率设置为30
-            #      copy_info[15] = 0
-            #      csv_writer.writerow(copy_info)
+            
 
     resultsHandle.close()
     return resultsFileName
 
 
-# parser.add_argument("--xls_file",default="/data/hsl/echo_rir_data/Echo_Single_Channel/echo_labels.xls",type=str)
-# #parser.add_argument("--csv_file",default="/data2/new_wzd/36_room_val_code/02_06_val_data.csv",type=str)
-# parser.add_argument("--split_key",default="T60 AHM:",type=str)
-# parser.add_argument("--freq_num",default="17",type=str)  #11对应250Hz,14对应500hz,17 1k，20 2k
-#
-# parser.add_argument("--split_internal",default=0.1,type=float)
-#
-# parser.add_argument('--rir_dir',default="/data/hsl/echo_rir_data/Echo_Single_Channel/",type=str)
-# parser.add_argument("--output_dir",default="/data/hsl/echo_1khz_wav",type=str)
-# parser.add_argument("--gen_convwav_shell",default='./echo_conv.sh',type = str)
-
-
-
-# parser.add_argument("--nohup_convwav_shell",default='/data2/new_wzd/36_room_val_code/nohup_conv_wav.sh',type = str)
-
-
-# def convert_xls2csv(xls_file):
-#     return csv
-#
-
 if __name__ == "__main__":
     args = parser.parse_args()
-    # xls_file = args.xls_file
-    # file = "./new_val_data.xls"
-    # csv_file = args.csv_file
     csv_file = excel_to_csv(args.xls_file)
     remove_lst = []
     nohup_lst = []

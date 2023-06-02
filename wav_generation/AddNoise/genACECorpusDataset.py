@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import time
-#from .extraLib import resample
 from extraLib import strcmp,judgeList,v_addnoise
 import wave
 import scipy.signal as sg
@@ -283,7 +282,6 @@ def genACECorpusDataset(params):
                     results["testID"] = results["testID"] + 1
 
 
-
             #我将TIMIT数据保存为了一个train.txt/test.txt，我只需遍历这个文件就行了啊！
             with open(ACECorpusData.TIMIT_TRAIN_TXT,encoding = 'gb2312') as read:
                 line2 = [lines for lines in read.readlines()]
@@ -291,10 +289,10 @@ def genACECorpusDataset(params):
             for f2 in line2:
                 time_timit = time.time()
                 wave_file = f2.split("\n")[0]
-                # timit_root = '/data2/cql/code/augu_data/test_concat_same_people_wav'
+
                 Speaker_root = args.Speaker_root
                 wave_file = os.path.join(Speaker_root, wave_file)
-                #wave_file = '/data2/cql/code/augu_data/train_data_TIMIT/DR4_FCAG0_SX63.WAV.wav'
+
                 y, sr = librosa.load(wave_file, sr = params.fs,mono=False)
                 print("加载timit时间{}".format(time.time()-time_timit))
                 if h.ndim != 1:
@@ -313,25 +311,12 @@ def genACECorpusDataset(params):
                 if "_" in params.talkerCodeName:
                     raise ValueError("名称不允许包含下划线！")
                 params.talkerName = save_name
-                #-----------------------------------------注释掉语音部分-------------------------------------------------
-                # for f3 in line1:
-                #     wave_file = f3.split("\n")[0]  # audio/b020_170_180.wav
-                #      # audio/b020_170_180.wav
-                #     noiseFileName = wave_file.split("/")[1]
-                #     noiseFileName = noiseFileName.split("\t")[0]
-                #     noiseFileName = os.path.join(audio_root, noiseFileName)
-                #     params.noise = (noiseFileName.split("/")[-1]).split(".")[0]
-                #
-                #     [noise, noiseFs, noiseChannels]=dict_noise[noiseFileName]
+
 
                 for f3 in line1:
-                      # audio/b020_170_180.wav
-                    # noiseFileName = wave_file.split("/")[1]
-                    # noiseFileName = noiseFileName.split("\t")[0]
+
                     noiseFileName =  f3.split('\n')[0]
-                    # Read in the noise000000000000000000000000000000000000000000000000000000000000000000000000000000
-                    # if not os.path.exists(noiseFileName):
-                    #     noiseFileName = '/data2/TEAM/Noise_TUT/TUT-acoustic-scenes-2017-development/audio/a062_60_70.wav'
+
                     params.noise = (noiseFileName.split("/")[-1]).split(".")[0]
                     if "_" in params.noise:
                         raise ValueError("noise名称不允许包含下划线！")
@@ -339,9 +324,7 @@ def genACECorpusDataset(params):
                     [noise, noiseFs, noiseChannels] = dict_noise[noiseFileName]
                     for snrInd in range(0,len(params.snrRange)):
                         params.SNR = params.snrRange[snrInd]
-                        # if params.SNR==0:
-                        #     continue
-                        #Generate the filename for the output .wav file
+
                         results["fullUtterOutFileName"] = os.path.join(micConfigCorpusFolder, '%s_%s_%s_%s_%ddB.wav'%(
                         params.corpusMicConfig,
                         params.roomCodeName,
@@ -349,13 +332,8 @@ def genACECorpusDataset(params):
                         params.noise,
                         params.SNR))
 
-
-                        #Prepare the file if it doesn't exist or you plan
-                        # % to overwrite it
-                        # print(sprintf('%s: Preparing to write file %s\n'%(params.corpusMicConfig,
-                        #                 results.fullUtterOutFileName)))
                         if not os.path.exists(results["fullUtterOutFileName"]) or params.overwriteWavFiles:
-                            # Add the noise to the speech using v_addnoise()
+
                             if not params.noWriteMode:
 
                                 noisyRevUtter = np.zeros([len(revUtter), params.nChannels])
