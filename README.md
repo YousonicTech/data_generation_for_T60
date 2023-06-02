@@ -98,7 +98,7 @@ RIR
 
 ## 含噪数据生成
 
-### 生成wav文件
+### 1. 生成wav文件
 
 对应`wav_generation/AddNoise`
 
@@ -144,7 +144,7 @@ RIR
 
 &emsp;&emsp;SNR：信噪比
 
-### 生成pt文件
+### 2. 生成pt文件
 
 **！！！pt文件包含的t60为30维！！！**
 
