@@ -11,8 +11,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--xls_file", default="/data1/zdm/code/gen_test/HYBL_test_RIR/hybl_total.xls", type=str)
 parser.add_argument('--rir_dir', default="/data1/zdm/code/gen_test/HYBL_test_RIR/", type=str)
 parser.add_argument("--output_dir", default="/data1/zdm/code/gen_test/Output/", type=str)
-parser.add_argument("--gen_convwav_shell", default='/data1/zdm/code/gen_test/sh/test.sh', type=str)
-
+parser.add_argument("--gen_convwav_shell", default='./test.sh', type=str)
+parser.add_argument("--log",default="./log/",type=str)
 # 创建解析器
 # ArgumentParser 对象包含将命令行解析成 Python 数据类型所需的全部信息。
 # path = r"C:\Users\17579\Desktop\新建文件夹\TAE_Train\Data_Aug\Step_1\test_1.csv"
@@ -151,8 +151,12 @@ if __name__ == "__main__":
 
     temp_lists = list(set(remove_lst))
     for i in range(len(temp_lists)):
+        logdir = args.log
+        if not os.path.exists(logdir):
+            os.makedirs(logdir)
         log_name = temp_lists[i].split('--MIC_CONFIGs')[-1].split("\n")[0].strip() + '.log'
-        nohup_shell = "nohup" + " " + temp_lists[i].split('\n')[0] + " " + ">%s 2>&1 &" % (log_name) + "\n"
+        log = os.path.join(logdir,log_name)
+        nohup_shell = "nohup" + " " + temp_lists[i].split('\n')[0] + " " + ">%s 2>&1 &" % (log) + "\n"
         nohup_lst.append(nohup_shell)
 
 
