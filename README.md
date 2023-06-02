@@ -112,7 +112,7 @@ save_dir = [
 
 
 csv_dir = [
-	csv_path_head + "eight-four"+"/20230527T093347_test_gen_corpus_dataset_results.csv",
+	csv_path_head + "eight-four"+"results.csv",
 ]
 ```
 
@@ -203,7 +203,7 @@ save_dir = [
 
 
 csv_dir = [
-	csv_path_head + "eight-four"+"/20230527T093347_test_gen_corpus_dataset_results.csv",
+	csv_path_head + "eight-four"+"results.csv",
 ]
 ```
 
