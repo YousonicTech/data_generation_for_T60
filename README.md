@@ -1,7 +1,7 @@
 # 数据生成
 
 ## 更新日志
-2023-6-2 优化log日志记录
+2023-6-2 优化log日志记录，优化pt生成
 
 
 ## 工程结构
@@ -54,6 +54,8 @@ RIR
 
 &emsp;&emsp; gen_convwav_shell：生成的sh文件
 
+&emsp;&emsp; log：使用nohup进行后台运行的log记录路径，默认为"./log"
+
 &emsp;如要修改干语料，修改option.py下的参数：
 
 &emsp;&emsp; Speaker_root：干语料路径
@@ -84,43 +86,16 @@ RIR
 
 &emsp;修改**`thread_process.py`** 28-30行的参数
 
-&emsp;&emsp; dir_str_head：第1步生成的{output_dir}/Dev/Speech/
+&emsp;&emsp; wav_root：第1步生成的{output_dir}/Dev/Speech/
 
-&emsp;&emsp; save_dir_head：要保存的pt文件路径
+&emsp;&emsp; save_pt_root：要保存的pt文件路径
 
-&emsp;&emsp; csv_path_head：第1步生成的{output_dir}/Dev/Speech/
+&emsp;&emsp; csv_path_root：第1步生成的{output_dir}/Dev/Speech/
 
-&emsp;修改
-
-&emsp;&emsp; dir_str、save_dir+各个房间
-
-&emsp;&emsp; csv_dir+各个房间+路径下的csv文件（现已全部为results.csv）
-
-例子：
-
-```
-# thread_process.py
-dir_str_head = "/data1/zdm/code/hybl_T60_experiment/chinese_cat_HYBL_wav/Dev/Speech/"
-
-save_dir_head = "/data1/zdm/code/hybl_T60_experiment/chinese_cat_HYBL_pt/"
-
-csv_path_head = "/data1/zdm/code/hybl_T60_experiment/chinese_cat_HYBL_wav/Dev/Speech/" 
-
-dir_str = [ 
-	dir_str_head + "eight-four",
-]
-
-save_dir = [
- save_dir_head + "eight-four",
-]
+读取wav_root下所有文件夹名称，在save_pt_root下生成对应的pt
 
 
-csv_dir = [
-	csv_path_head + "eight-four"+"results.csv",
-]
-```
-
-生成的pt文件格式与wav一致
+生成的pt文件格式与wav一致，后面-0表示通道
 
 ## 含噪数据生成
 
@@ -137,6 +112,8 @@ csv_dir = [
 &emsp;&emsp;output_dir：wav文件输出路径
 
 &emsp;&emsp;gen_convwav_shell：生成的sh文件
+
+&emsp;&emsp; log：使用nohup进行后台运行的log记录路径，默认为"./log"
 
 &emsp;如要**修改干语料**，修改option.py下的参数：
 
@@ -176,40 +153,12 @@ csv_dir = [
 
 &emsp;修改**`thread_process.py`** 28-30行的参数
 
-&emsp;&emsp;dir_str_head：第1步生成的{output_dir}/Dev/Speech/
+&emsp;&emsp;wav_root：第1步生成的{output_dir}/Dev/Speech/
 
-&emsp;&emsp;save_dir_head：要保存的pt文件路径
+&emsp;&emsp;save_pt_root：要保存的pt文件路径
 
-&emsp;&emsp;csv_path_head：第1步生成的{output_dir}/Dev/Speech/
+&emsp;&emsp;csv_path_root：第1步生成的{output_dir}/Dev/Speech/
 
-&emsp;修改
+读取wav_root下所有文件夹名称，在save_pt_root下生成对应的pt
 
-&emsp;&emsp;dir_str、save_dir+各个房间
-
-&emsp;&emsp;csv_dir+各个房间+路径下的csv文件（现已全部为results.csv）
-
-例子：
-
-```
-dir_str_head = "/data1/zdm/code/hybl_T60_experiment/chinese_cat_HYBL_wav/Dev/Speech/"
-
-save_dir_head = "/data1/zdm/code/hybl_T60_experiment/chinese_cat_HYBL_pt/"
-
-csv_path_head = "/data1/zdm/code/hybl_T60_experiment/chinese_cat_HYBL_wav/Dev/Speech/" 
-
-dir_str = [ 
-	dir_str_head + "eight-four",
-]
-
-save_dir = [
- save_dir_head + "eight-four",
-]
-
-
-csv_dir = [
-	csv_path_head + "eight-four"+"results.csv",
-]
-```
-
-生成的pt文件格式与wav一致
-
+生成的pt文件格式与wav一致，后面-0表示通道

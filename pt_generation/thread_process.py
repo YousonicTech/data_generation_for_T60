@@ -25,56 +25,22 @@ def execCmd(cmd):
 # Don't forget the last '/' in those paths!!!!
 # Carefully check!!!
 
-dir_str_head = "/data1/zdm/code/hybl_T60_experiment/chinese_cat_HYBL_wav/Dev/Speech/"  #
-save_dir_head = "/data1/zdm/code/hybl_T60_experiment/chinese_cat_HYBL_pt/"
-csv_path_head = "/data1/zdm/code/hybl_T60_experiment/chinese_cat_HYBL_wav/Dev/Speech/"  # 新传上去了
+wav_root = "/data1/zdm/code/gen_test/Output/Dev/Speech/"  #
+save_pt_root = "/data1/zdm/code/gen_test/pt/"
+csv_path_root = "/data1/zdm/code/gen_test/Output/Dev/Speech/"  # 新传上去了
 
-dir_str = [ 
-            dir_str_head + "eight-four",
-            dir_str_head + "eight-two",
-            dir_str_head + "five-eleven",
-            dir_str_head + "five-one",
-            dir_str_head + "five-twelve",
-            dir_str_head + "five-two",
-            dir_str_head + "six-eight",
-            dir_str_head + "six-one",
-            dir_str_head + "z-3",
-            dir_str_head + "z-4",
-            dir_str_head + "z-5"
-        ]
+wav_list = []
+save_list = []
+csv_list = []
 
-save_dir = [
-            save_dir_head + "eight-four",
-            save_dir_head + "eight-two",
-            save_dir_head + "five-eleven",
-            save_dir_head + "five-one",
-            save_dir_head + "five-twelve",
-            save_dir_head + "five-two",
-            save_dir_head + "six-eight",
-            save_dir_head + "six-one",
-            save_dir_head + "z-3",
-            save_dir_head + "z-4",
-            save_dir_head + "z-5"
-            
-            ]
+for folder_name in os.listdir(wav_root):
+    if os.path.isdir(os.path.join(wav_root,folder_name)):
+        wav_list.append(os.path.join(wav_root,folder_name))
+        save_list.append(os.path.join(save_pt_root,folder_name))
+        csv_list.append(os.path.join(csv_path_root,folder_name,"results.csv"))
 
-csv_dir = [
-            
-            csv_path_head + "eight-four"+"/20230527T093347_test_gen_corpus_dataset_results.csv",
-            csv_path_head + "eight-two"+"/20230527T093347_test_gen_corpus_dataset_results.csv",
-            csv_path_head + "five-eleven"+"/20230527T093347_test_gen_corpus_dataset_results.csv",
-            csv_path_head + "five-one"+"/20230527T093347_test_gen_corpus_dataset_results.csv",
-            csv_path_head + "five-twelve"+"/20230527T093347_test_gen_corpus_dataset_results.csv",
-            csv_path_head + "five-two"+"/20230527T093347_test_gen_corpus_dataset_results.csv",
-            csv_path_head + "six-eight"+"/20230527T093347_test_gen_corpus_dataset_results.csv",
-            csv_path_head + "six-one"+"/20230527T093347_test_gen_corpus_dataset_results.csv",
-            csv_path_head + "z-3"+"/20230527T093347_test_gen_corpus_dataset_results.csv",
-            csv_path_head + "z-4"+"/20230527T093347_test_gen_corpus_dataset_results.csv",
-            csv_path_head + "z-5"+"/20230530T184512_results.csv",
-        
-        ]
 if __name__ == "__main__":
-    commands = ["python OurData_GenPT.py --dir_str " + dir_str[i] + " --save_dir " + save_dir[i] + " --csv_file " + csv_dir[i] for i in range(len(dir_str))]
+    commands = ["python OurData_GenPT.py --dir_str " + wav_list[i] + " --save_dir " + save_list[i] + " --csv_file " + csv_list[i] for i in range(len(wav_list))]
     threads = []
     for cmd in commands:
         th = threading.Thread(target=execCmd, args=(cmd,))
