@@ -60,7 +60,7 @@ RIR
 
 &emsp;&emsp; Speaker_root：干语料路径
 
-&emsp;&emsp; Speaker_txt：干语料txt
+&emsp;&emsp; Speaker_txt：干语料txt（gb2312格式）
 
 1.2 运行`python gen_convwav_shell.py`，会在output_dir下生成csv文件，并生成sh文件
 
@@ -118,7 +118,7 @@ RIR
 
 &emsp;&emsp;Speaker_root：干语料路径
 
-&emsp;&emsp;Speaker_txt：干语料txt
+&emsp;&emsp;Speaker_txt：干语料txt（gb2312格式）
 
 &emsp;如要**修改噪音**，修改option.py下的参数：
 
