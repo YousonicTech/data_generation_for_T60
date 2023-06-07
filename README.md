@@ -1,6 +1,7 @@
 # 数据生成
 
 ## 更新日志
+2023-6-7 AddNoise模块添加参数SNR指定信噪比
 2023-6-2 优化log日志记录，优化pt生成
 
 
@@ -120,9 +121,14 @@ RIR
 
 &emsp;&emsp;Speaker_txt：干语料txt（gb2312格式）
 
+&emsp;如要**修改信噪比**，修改option.py下的参数：
+
+&emsp;&emsp;SNR：信噪比列表
+
 &emsp;如要**修改噪音**，修改option.py下的参数：
 
 &emsp;&emsp;noise_dir：noise的txt目录
+
 
 1.2 运行`python gen_convwav_shell.py`，会在output_dir下生成csv文件，并生成sh文件
 

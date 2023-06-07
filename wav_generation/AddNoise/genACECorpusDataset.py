@@ -27,7 +27,9 @@ def genACECorpusDataset(params):
 
     nMicConfigs = params.micConfigRange
 
-    nSNRs = len(params.snrRange)
+    nSNRs = args.SNR
+    params.snrRange=nSNRs
+    # nSNRs = len(params.snrRange)
     nNoises = len(params.noiseRange)
     nTalkers = len(params.talkerRange)
     nUtterTypes = len(params.utterRange)
@@ -189,7 +191,7 @@ def genACECorpusDataset(params):
 
 
                 dict_noise[noiseFileName] = [noise, noiseFs, noiseChannels]
-            print("读取15条语音的时间是:{}".format(time.time() - time_noise))
+            print("读取15条噪音的时间是:{}".format(time.time() - time_noise))
             #for chanInd in range(0,params.nChannels):
             #升到只有1到9
             if h.ndim != 1:
