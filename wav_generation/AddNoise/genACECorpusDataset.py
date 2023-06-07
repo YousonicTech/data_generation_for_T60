@@ -17,6 +17,8 @@ import glob
 import random
 from option import args
 
+random.seed(1234)
+
 def genACECorpusDataset(params):
     ACECorpusData = getACECorpusData(params.readFromServer)
     #funciton logic
@@ -361,6 +363,8 @@ def genACECorpusDataset(params):
                             #Write out the .wav file containing the speech
 
                             time_write = time.time()
+                            
+                            
                             sf.write(results["fullUtterOutFileName"],noisyRevUtter,params.fs)
                             print("写入文件用时：{}".format(time.time()-time_write))
         resultsHandle.close()
