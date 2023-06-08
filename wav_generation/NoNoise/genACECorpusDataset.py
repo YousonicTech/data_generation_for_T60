@@ -47,8 +47,9 @@ def genACECorpusDataset(params):
     a = params.corpusOutputFolderRoot
     b = params.datasetName
     c = ACECorpusData.ACE_DATA_EXT_SPEECH
-    corpusFolder = os.path.join(params.corpusOutputFolderRoot,params.datasetName,ACECorpusData.ACE_DATA_EXT_SPEECH)
+    # corpusFolder = os.path.join(params.corpusOutputFolderRoot,params.datasetName,ACECorpusData.ACE_DATA_EXT_SPEECH)
     #corpusFolder = params.corpusOutputFolderRoot+params.datasetName+'/'+ACECorpusData.ACE_DATA_EXT_SPEECH
+    corpusFolder = params.corpusOutputFolderRoot
     if not os.path.exists(corpusFolder):
 
         os.makedirs(corpusFolder)

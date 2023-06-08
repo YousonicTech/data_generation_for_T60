@@ -25,9 +25,9 @@ def execCmd(cmd):
 # Don't forget the last '/' in those paths!!!!
 # Carefully check!!!
 
-wav_root = "/data1/zdm/code/gen_test/Output/Dev/Speech/"  #
-save_pt_root = "/data1/zdm/code/gen_test/pt/"
-csv_path_root = "/data1/zdm/code/gen_test/Output/Dev/Speech/"  # 新传上去了
+wav_root = "/data1/zdm/T60_500HZ_Data_wav/val/hybl/"  #
+save_pt_root = "/data1/zdm/T60_500Hz_Data_pt/NoNoise/T60_500Hz_nonoise_val_pt/hybl/"
+csv_path_root = "/data1/zdm/T60_500HZ_Data_wav/val/hybl/"  # 新传上去了
 
 wav_list = []
 save_list = []

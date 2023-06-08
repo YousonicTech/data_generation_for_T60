@@ -1,7 +1,9 @@
 # 数据生成
 
 ## 更新日志
-2023-6-7 AddNoise模块添加参数SNR指定信噪比
+2023-7-8 wav_generation去除Dev/Specch路径生成，合成的wav直接输出到output_dir中
+
+2023-6-7 AddNoise模块option.py添加参数SNR指定信噪比
 
 2023-6-2 优化log日志记录，优化pt生成
 

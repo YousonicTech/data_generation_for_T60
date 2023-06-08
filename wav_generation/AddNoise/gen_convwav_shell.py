@@ -8,9 +8,9 @@ import numpy as np
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("--xls_file", default="/data1/zdm/code/hybl_T60_experiment/HYBL_test_RIR/hybl_total.xls", type=str)
-parser.add_argument('--rir_dir', default="/data1/zdm/code/hybl_T60_experiment/HYBL_test_RIR", type=str)
-parser.add_argument("--output_dir", default="/data1/zdm/code/T60_data_generation/test/RIR", type=str)
+parser.add_argument("--xls_file", default="/data1/zdm/T60data/VAL_RIR/HYBL_RIR/hybl_total.xls", type=str)
+parser.add_argument('--rir_dir', default="/data1/zdm/T60data/VAL_RIR/HYBL_RIR/", type=str)
+parser.add_argument("--output_dir", default="/data1/zdm/T60_500HZ_Data_wav/val/hybl_3040noise/", type=str)
 parser.add_argument("--gen_convwav_shell", default='./test.sh', type=str)
 parser.add_argument("--log",default="./log/",type=str)
 

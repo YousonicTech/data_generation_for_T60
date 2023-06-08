@@ -55,7 +55,11 @@ def genACECorpusDataset(params):
 
     # Generate the output folder root name
     # corpusFolder = [params.corpusOutputFolderRoot,params.datasetName, '/', ACECorpusData.ACE_DATA_EXT_SPEECH]
-    corpusFolder = os.path.join(params.corpusOutputFolderRoot,params.datasetName,ACECorpusData.ACE_DATA_EXT_SPEECH)
+    # outptFolder/Dev/Speech
+    # corpusFolder = os.path.join(params.corpusOutputFolderRoot,params.datasetName,ACECorpusData.ACE_DATA_EXT_SPEECH)
+    
+    corpusFolder = params.corpusOutputFolderRoot
+    
     #corpusFolder = params.corpusOutputFolderRoot+params.datasetName+'/'+ACECorpusData.ACE_DATA_EXT_SPEECH
     if not os.path.exists(corpusFolder):
         # raise ValueEroor('Corpus root folder %s does not exist.  Creating.'%corpusFolder)
