@@ -75,10 +75,6 @@ RIR
 
 1.3 随后运行生成的sh文件（即1.1中的参数gen_convwav_shell），会在output_dir文件夹下生成RIR\*speech的wav文件{room}/*.wav
 
-
-
-
-
 1.生成的WAV文件命名格式： {room}\_{wav_name}\_{speech}_N_NdB.wav
 
     room为房间名，如room1，room2
