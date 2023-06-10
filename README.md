@@ -58,19 +58,19 @@ RIR
 
 1. xls_file：RIR对应的xls文件
 
-&emsp;&emsp; rir_dir：RIR路径地址
+    rir_dir：RIR路径地址
 
-&emsp;&emsp; output_dir：wav文件输出路径
+    output_dir：wav文件输出路径
 
-&emsp;&emsp; gen_convwav_shell：生成的sh文件
+    gen_convwav_shell：生成的sh文件
 
-&emsp;&emsp; log：使用nohup进行后台运行的log记录路径，默认为"./log"
+    log：使用nohup进行后台运行的log记录路径，默认为"./log"
 
-&emsp;如要修改干语料，修改option.py下的参数：
+2. 如要修改干语料，修改option.py下的参数：
 
-&emsp;&emsp; Speaker_root：干语料路径
+    Speaker_root：干语料路径
 
-&emsp;&emsp; Speaker_txt：干语料txt（gb2312格式）
+    Speaker_txt：干语料txt（gb2312格式）
 
 1.2 运行`python gen_convwav_shell.py`，会在output_dir下生成csv文件，并生成sh文件
 
@@ -78,15 +78,15 @@ RIR
 
 
 
-&emsp;生成的WAV文件命名如下：
+生成的WAV文件命名如下：
 
-&emsp;{room}\_{wav_name}\_{speech}_N_NdB.wav
+1. {room}\_{wav_name}\_{speech}_N_NdB.wav
 
-&emsp;&emsp; room为房间名，如room1，room2
+    room为房间名，如room1，room2
 
-&emsp;&emsp; rir_wav_name为具体的wav文件名，如room1-ch1、 room1-ch2
+    rir_wav_name为具体的wav文件名，如room1-ch1、 room1-ch2
 
-&emsp;&emsp; speech为干语料
+    speech为干语料
 
 ### 2. 生成pt文件
 
