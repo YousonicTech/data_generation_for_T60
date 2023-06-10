@@ -146,7 +146,7 @@ noise_dir：noise的txt目录
 
 4. 生成的WAV文件命名如下：
 
-{room}\_{wav_name}\_{speech}\_{noise}_{SNR}dB.wav
+{room}\_{wav_name}\_{speech}\_{noise}\_{SNR}dB.wav
 
     room：房间名，如room1，room2
 
