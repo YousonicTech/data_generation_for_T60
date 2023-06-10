@@ -77,9 +77,9 @@ RIR
 
 
 
-生成的WAV文件命名如下：
 
-1. {room}\_{wav_name}\_{speech}_N_NdB.wav
+
+1.生成的WAV文件命名格式： {room}\_{wav_name}\_{speech}_N_NdB.wav
 
     room为房间名，如room1，room2
 
@@ -144,7 +144,7 @@ noise_dir：noise的txt目录
 
 
 
-4. 生成的WAV文件命名如下：{room}\_{wav_name}\_{speech}\_{noise}\_{SNR}dB.wav
+4. 生成的WAV文件命名格式：{room}\_{wav_name}\_{speech}\_{noise}\_{SNR}dB.wav
 
     room：房间名，如room1，room2
 
