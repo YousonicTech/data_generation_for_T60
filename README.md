@@ -54,24 +54,20 @@ RIR
 
 对应`wav_generation/NoNoise`
 
-1.1 修改**`gen_convwav_shell.py`**的参数：
+1.1 修改`gen_convwav_shell.py`的参数：
 
 1. xls_file：RIR对应的xls文件
-
+'''
     rir_dir：RIR路径地址
-
     output_dir：wav文件输出路径
-
     gen_convwav_shell：生成的sh文件
-
     log：使用nohup进行后台运行的log记录路径，默认为"./log"
-
+'''
 2. 如要修改干语料，修改option.py下的参数：
-
-        1. Speaker_root：干语料路径
-
-        1. Speaker_txt：干语料txt（gb2312格式）
-
+'''
+        Speaker_root：干语料路径
+        Speaker_txt：干语料txt（gb2312格式）
+'''
 1.2 运行`python gen_convwav_shell.py`，会在output_dir下生成csv文件，并生成sh文件
 
 1.3 随后运行生成的sh文件（即1.1中的参数gen_convwav_shell），会在output_dir文件夹下生成RIR\*speech的wav文件{room}/*.wav
