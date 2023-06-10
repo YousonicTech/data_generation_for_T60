@@ -68,9 +68,9 @@ RIR
 
 2. 如要修改干语料，修改option.py下的参数：
 
-    2.1 Speaker_root：干语料路径
+    Speaker_root：干语料路径
 
-    2.3 Speaker_txt：干语料txt（gb2312格式）
+    Speaker_txt：干语料txt（gb2312格式）
 
 1.2 运行`python gen_convwav_shell.py`，会在output_dir下生成csv文件，并生成sh文件
 
