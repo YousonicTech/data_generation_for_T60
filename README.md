@@ -93,17 +93,15 @@ RIR
 
 对应`pt_generation`
 
-1. 修改**`thread_process.py`** 28-30行的参数
+2. 修改**`thread_process.py`** 28-30行的参数
 
-&emsp;&emsp; wav_root：第1步生成的{output_dir}/Dev/Speech/
+```
+wav_root：      第1步生成的{output_dir}/Dev/Speech/
+save_pt_root：  要保存的pt文件路径
+csv_path_root： 第1步生成的{output_dir}/Dev/Speech/
+```
 
-&emsp;&emsp; save_pt_root：要保存的pt文件路径
-
-&emsp;&emsp; csv_path_root：第1步生成的{output_dir}/Dev/Speech/
-
-读取wav_root下所有房间文件夹名称，在save_pt_root下生成对应的pt
-
-生成的pt文件格式与wav一致，后面-0表示通道
+读取wav_root下所有房间文件夹名称，在save_pt_root下生成对应的pt，生成的pt文件格式与wav一致，后面-0表示通道
 
 ## 含噪数据生成
 
@@ -113,30 +111,32 @@ RIR
 
 1.1 修改**`gen_convwav_shell.py`**的参数：
 
-&emsp;&emsp;xls_file：RIR对应的xls文件
+```
+xls_file：          RIR对应的xls文件
+rir_dir：           RIR路径地址
+output_dir：        wav文件输出路径
+gen_convwav_shell： 生成的sh文件
+log：               使用nohup进行后台运行的log记录路径，默认为"./log"
+```
 
-&emsp;&emsp;rir_dir：RIR路径地址
+1. 如要**修改干语料**，修改option.py下的参数：
 
-&emsp;&emsp;output_dir：wav文件输出路径
+```
+Speaker_root：  干语料路径
+Speaker_txt：   干语料txt（gb2312格式）
+```
 
-&emsp;&emsp;gen_convwav_shell：生成的sh文件
+2. 如要**修改信噪比**，修改option.py下的参数：
 
-&emsp;&emsp; log：使用nohup进行后台运行的log记录路径，默认为"./log"
+```
+SNR：信噪比列表
+```
 
-&emsp;如要**修改干语料**，修改option.py下的参数：
+3. 如要**修改噪音**，修改option.py下的参数：
 
-&emsp;&emsp;Speaker_root：干语料路径
-
-&emsp;&emsp;Speaker_txt：干语料txt（gb2312格式）
-
-&emsp;如要**修改信噪比**，修改option.py下的参数：
-
-&emsp;&emsp;SNR：信噪比列表
-
-&emsp;如要**修改噪音**，修改option.py下的参数：
-
-&emsp;&emsp;noise_dir：noise的txt目录
-
+```
+noise_dir：noise的txt目录
+```
 
 1.2 运行`python gen_convwav_shell.py`，会在output_dir下生成csv文件，并生成sh文件
 
@@ -144,19 +144,19 @@ RIR
 
 
 
-&emsp;生成的WAV文件命名如下：
+4. 生成的WAV文件命名如下：
 
-&emsp;{room}\_{wav_name}\_{speech}\_{noise}_{SNR}dB.wav
+{room}\_{wav_name}\_{speech}\_{noise}_{SNR}dB.wav
 
-&emsp;&emsp;room：房间名，如room1，room2
+    room：房间名，如room1，room2
 
-&emsp;&emsp;rir_wav_name：具体的wav文件名，如room1-ch1、 room1-ch2
+    rir_wav_name：具体的wav文件名，如room1-ch1、 room1-ch2
 
-&emsp;&emsp;speech：干语料
+    speech：干语料
 
-&emsp;&emsp;noise：噪音
+    noise：噪音
 
-&emsp;&emsp;SNR：信噪比
+    SNR：信噪比
 
 ### 2. 生成pt文件
 
@@ -164,17 +164,15 @@ RIR
 
 对应`pt_generation`
 
-&emsp;修改**`thread_process.py`** 28-30行的参数
+修改**`thread_process.py`** 28-30行的参数
 
-&emsp;&emsp;wav_root：第1步生成的{output_dir}/Dev/Speech/
+```
+wav_root：      第1步生成的{output_dir}/Dev/Speech/
+save_pt_root：  要保存的pt文件路径
+csv_path_root： 第1步生成的{output_dir}/Dev/Speech/
+```
 
-&emsp;&emsp;save_pt_root：要保存的pt文件路径
-
-&emsp;&emsp;csv_path_root：第1步生成的{output_dir}/Dev/Speech/
-
-读取wav_root下所有房间文件夹名称，在save_pt_root下生成对应的pt
-
-生成的pt文件格式与wav一致，后面-0表示通道
+读取wav_root下所有房间文件夹名称，在save_pt_root下生成对应的pt，生成的pt文件格式与wav一致，后面-0表示通道
 
 ## TODO
 LiveRecordAddNoise
