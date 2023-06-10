@@ -18,7 +18,6 @@ import random
 from option import args
 
 random.seed(1234)
-
 def genACECorpusDataset(params):
     ACECorpusData = getACECorpusData(params.readFromServer)
     #funciton logic

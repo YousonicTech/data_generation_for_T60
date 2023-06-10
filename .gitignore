@@ -1,0 +1,5 @@
+**/__pycache__
+/wav_generation/NoNoise/log
+/wav_generation/AddNoise/log
+/wav_generation/NoNoise/*.sh
+/wav_generation/AddNoise/*.sh

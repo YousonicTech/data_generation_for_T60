@@ -8,6 +8,8 @@
 """
 
 import numpy as np
+import sys
+sys.path.append("..")
 import splweighting
 import wave
 import glob
@@ -32,11 +34,11 @@ chunk_overlap = 0.5
 parser = argparse.ArgumentParser(description='manual to this script')
 
 parser.add_argument('--csv_file', type=str,
-                     default="/data1/zdm/code/T60_data_generation/test/RIR/Dev/Speech/eight-two/8.823658_20230531T110343_test_gen_corpus_dataset_results.csv" )
+                     default="/data1/zdm/T60_500HZ_Data_wav/train/HYBL_3040noise/six-eight/results.csv" )
 parser.add_argument('--dir_str', type=str,
-                    default="/data1/zdm/code/T60_data_generation/test/RIR/Dev/Speech/eight-two/")
+                    default="/data1/zdm/T60_500HZ_Data_wav/train/HYBL_3040noise/six-eight/")
 parser.add_argument('--save_dir', type=str,
-                    default="/data1/zdm/code/test2")
+                    default="/data1/zdm/test2")
 
 args = parser.parse_args()
 save_dir = args.save_dir

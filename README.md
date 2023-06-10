@@ -1,7 +1,9 @@
 # 数据生成
 
 ## 更新日志
-2023-7-8 wav_generation去除Dev/Specch路径生成，合成的wav直接输出到output_dir中
+2023-6-10 增加现场录音pt文件生成，增加线程控制防止占满cpu资源，调整工程结构
+
+2023-6-8 wav_generation去除Dev/Specch路径生成，合成的wav直接输出到output_dir中
 
 2023-6-7 AddNoise模块option.py添加参数SNR指定信噪比
 
@@ -11,8 +13,12 @@
 ## 工程结构
 
 ```
-T60_data_generation
 ├── pt_generation
+│   ├── LiveRecord
+│   ├── Synthetic
+│   ├── __init__.py
+│   ├── splweighting.py
+│   └── gen_specgram.py
 └── wav_generation
     ├── AddNoise
     └── NoNoise
@@ -50,7 +56,7 @@ RIR
 
 1.1 修改**`gen_convwav_shell.py`**的参数：
 
-&emsp;&emsp; xls_file：RIR对应的xls文件
+1. xls_file：RIR对应的xls文件
 
 &emsp;&emsp; rir_dir：RIR路径地址
 
@@ -170,3 +176,6 @@ RIR
 读取wav_root下所有房间文件夹名称，在save_pt_root下生成对应的pt
 
 生成的pt文件格式与wav一致，后面-0表示通道
+
+## TODO
+LiveRecordAddNoise

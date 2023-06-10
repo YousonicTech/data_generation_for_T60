@@ -30,8 +30,7 @@ parser.add_argument('--MIC_CONFIGs', default="six-three", type=str)
 
 parser.add_argument('--SNR',default=[30,40],nargs='+')
 parser.add_argument('--noise_dir', default="/data1/zdm/Noise/15NoiseScenes_txt/", type=str)
-parser.add_argument('--Speaker_root', default='/data1/zdm/speech/CatChinese/', type=str)
-parser.add_argument('--Speaker_txt', default='/data1/zdm/speech/CatChinese/CatChinese.txt', type=str)
+parser.add_argument('--Speaker_root', default='/data1/zdm/CleanSpeech/speech_wav/CatChinese/', type=str)
+parser.add_argument('--Speaker_txt', default='/data1/zdm/CleanSpeech/speech_wav/CatChinese/CatChinese.txt', type=str)
 args = parser.parse_args()
-
 
