@@ -10,7 +10,8 @@
 import numpy as np
 import sys
 sys.path.append("..")
-import splweighting
+# print(sys.path)
+import splweighting 
 import wave
 import glob
 import os
@@ -21,24 +22,19 @@ from gen_specgram import Filter_Downsample_Spec
 # 加载gc模块
 import gc
 
-# 垃圾回收
-# gc.collect() 返回处理这些循环引用一共释放掉的对象个数
-
-##configuration area
 chunk_length = 4
 chunk_overlap = 0.5
-# TODO 需要改变csv,numpydir/csv_save_path这些路径
 
 #nohup python 0921_OurData_GenPT.py --dir_str /data2/hsl/0323_wav_data/add_without_zky_0316/Speech/central-hall-university-york/ --save_dir /data2/hsl/0323_pt_data/add_without_zky_0316/train/central-hall-university-york/ --csv_file /data2/hsl/0323_wav_data/add_without_zky_0316/Speech/central-hall-university-york/20230321T124743_test_gen_corpus_dataset_results.csv >> /data2/hsl/0324_central-hall-university-york.log 2>&1 &
 
 parser = argparse.ArgumentParser(description='manual to this script')
 
 parser.add_argument('--csv_file', type=str,
-                     default="/data1/zdm/T60_500HZ_Data_wav/train/HYBL_3040noise/six-eight/results.csv" )
+                    default="/data1/zdm/T60_500HZ_Data_wav/val/hybl_3040noise/eight-four/results.csv" )
 parser.add_argument('--dir_str', type=str,
-                    default="/data1/zdm/T60_500HZ_Data_wav/train/HYBL_3040noise/six-eight/")
+                    default="/data1/zdm/data_test/eight-four/")
 parser.add_argument('--save_dir', type=str,
-                    default="/data1/zdm/test2")
+                    default="/data1/zdm/data_test/eight-four")
 
 args = parser.parse_args()
 save_dir = args.save_dir
@@ -87,9 +83,6 @@ class Totensor(object):
 
 csv_data = pd.read_csv(csv_file)
 
-# for wav_file_name in glob.glob(dir_str+r"/*.wav"):
-#for file_name in glob.glob("/data1/zdm/code/T60_experiment/new_CAS_YanXiHu_wav/Dev/Speech/219/219_1_219_channel2_219_output_TIMIT_0_0dB-0.wav"):
-    
 for file_name in glob.glob(dir_str + r"/*.wav"):
     # wav_file_name = glob.glob(dir_str + r"/*.wav")[0]
     f = wave.open(file_name, "rb")
@@ -97,7 +90,6 @@ for file_name in glob.glob(dir_str + r"/*.wav"):
     nchannels, sampwidth, framerate, nframes = params[:4]
     #print(file_name)
     #print(nchannels, sampwidth, framerate, nframes / framerate)
-
 
     str_data = f.readframes(nframes)
     f.close()
@@ -118,30 +110,27 @@ for file_name in glob.glob(dir_str + r"/*.wav"):
 
         available_part_num = (audio_time - chunk_overlap) // (
                 chunk_length - chunk_overlap)  # 4*x - (x-1)*0.5 <= audio_time    x为available_part_num
+        print("cut num:",available_part_num)
+        # if available_part_num == 1:
+        #     cut_parameters = [chunk_length]
+        # else:
+        #     cut_parameters = np.arange(chunk_length,
+        #                                (chunk_length - chunk_overlap) * available_part_num + chunk_overlap,
+        #                                chunk_length)  # np.arange()函数第一个参数为起点，第二个参数为终点，第三个参数为步长（10秒）
 
-        if available_part_num == 1:
-            cut_parameters = [chunk_length]
-        else:
-            cut_parameters = np.arange(chunk_length,
-                                       (chunk_length - chunk_overlap) * available_part_num + chunk_overlap,
-                                       chunk_length)  # np.arange()函数第一个参数为起点，第二个参数为终点，第三个参数为步长（10秒）
-
-        print("cutcut,",cut_parameters)
         start_time = int(0)  # 开始时间设为0
         count = 0
         # 开始存储pt文件
         dict = {}
-        dict_125 = {}
-        dict_250 = {}
-        dict_500 = {}
-        dict_1000 = {}
-        dict_2000 = {}
-        dict_4000 = {}
+        # dict_125 = {}
+        # dict_250 = {}
+        # dict_500 = {}
+        # dict_1000 = {}
+        # dict_2000 = {}
+        # dict_4000 = {}
         save_data = []
         
-        
-        for t in cut_parameters:
-            stop_time = int(t)  # pydub以毫秒为单位工作
+        for t in range(int(available_part_num)):
             start = int(start_time * framerate)
             end = int((start_time + chunk_length) * framerate)
             audio_chunk = audio_samples_np[start:end]  # 音频切割按开始时间到结束时间切割
@@ -149,6 +138,7 @@ for file_name in glob.glob(dir_str + r"/*.wav"):
             ##ingore chunks with no audio
             chunk_spl = SPLCal(audio_chunk)
             if whole_audio_SPL - chunk_spl >= 20:
+                start_time = start_time + chunk_length - chunk_overlap  # 开始时间变为结束时间前1s---------也就是叠加上一段音频末尾的4s
                 continue
 
             ##file naming
@@ -156,10 +146,14 @@ for file_name in glob.glob(dir_str + r"/*.wav"):
             count += 1
 
             ##A weighting
+
             chunk_a_weighting = splweighting.weight_signal(audio_chunk, framerate)
 
+            # chunk_a_weighting = weight_signal(audio_chunk, framerate)
             ##gammatone
             chunk_result, _, _ = Filter_Downsample_Spec(chunk_a_weighting, framerate)
+            # if count==1:
+            #     print(chunk_result[2])
             '''
             room = new_file_name  # +"_" + new_file_name.split("_")[1]
             #print(new_file_name)
@@ -210,16 +204,10 @@ for file_name in glob.glob(dir_str + r"/*.wav"):
 
         if len(save_data) != 0:
             pt_file_name = os.path.join(save_dir, new_file_name + '-' + str(chan_num) + '.pt')
-            # pt_file_name_125 = os.path.join(save_dir, new_file_name + '-' + str(chan_num) + '-' + '125hz.pt')
-            # pt_file_name_250 = os.path.join(save_dir, new_file_name + '-' + str(chan_num) + '-' + '250hz.pt')
-            # pt_file_name_500 = os.path.join(save_dir, new_file_name + '-' + str(chan_num) + '-' + '500hz.pt')
-            # pt_file_name_1000 = os.path.join(save_dir, new_file_name + '-' + str(chan_num) + '-' + '1000hz.pt')
-            # pt_file_name_2000 = os.path.join(save_dir, new_file_name + '-' + str(chan_num) + '-' + '2000hz.pt')
-            # pt_file_name_4000 = os.path.join(save_dir, new_file_name + '-' + str(chan_num) + '-' + '4000hz.pt')
 
             dict[new_file_name + '-' + str(chan_num)] = save_data
-
-
+            
+            
             torch.save(dict, pt_file_name)
             print('------------------------saved---------------------------')
 

@@ -5,12 +5,11 @@ import shutil
 import xlrd
 
 import numpy as np
-
 parser = argparse.ArgumentParser()
 
-parser.add_argument("--xls_file", default="/data1/zdm/T60data/RIR/ZGC_part_RIR/ZGC_total.xls", type=str)
-parser.add_argument('--rir_dir', default="/data1/zdm/T60data/RIR/ZGC_part_RIR/", type=str)
-parser.add_argument("--output_dir", default="/data1/zdm/T60_500HZ_Data_wav/train/ZGC_3040noise/", type=str)
+parser.add_argument("--xls_file", default="/data1/zdm/sti_datasets/val/LiveRecord/wav/CPEZ_LiveRecord/CPEZ_total.xls", type=str)
+parser.add_argument('--rir_dir', default="/data1/zdm/sti_datasets/val/LiveRecord_RIR/CPEZ_RIR/", type=str)
+parser.add_argument("--output_dir", default="/data1/zdm/sti_datasets/val/Synthetic_wav/CPEZ/", type=str)
 parser.add_argument("--gen_convwav_shell", default='./test.sh', type=str)
 parser.add_argument("--log",default="./log/",type=str)
 
@@ -54,6 +53,7 @@ def excel_to_csv(file):
         values = sheet1.row_values(i)
         room = values[1]
         config = values[0]
+        
         channel = values[4]
         fre_band = 0
 
@@ -73,7 +73,7 @@ def excel_to_csv(file):
                     info.append(1)
                     info.append(48000)
                     info.append(room)
-                    info.append("NAN")
+                    info.append(config)
                     info.append(1)
                     info.append(2)
                     info.append(config)
@@ -107,7 +107,6 @@ def excel_to_csv(file):
                     if fre_band == 30:
                         info[15] = 0
                     csv_writer.writerow(info)
-            
 
     resultsHandle.close()
     return resultsFileName

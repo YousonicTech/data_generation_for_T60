@@ -72,9 +72,8 @@ def genACECorpusDataset(params):
     for micConfigInd in range(params.micConfigRange):
         #Load the mic config parameters
         params.corpusMicConfig = ACECorpusData.MIC_CONFIGs[micConfigInd]
-        
         if "_" in params.corpusMicConfig:
-            raise ValueError("名称不允许包含下划线！")
+            raise ValueError("ROOM 名称不允许包含下划线！")
         
         if params.corpusMicConfig != args.need_config:
             continue
@@ -126,7 +125,7 @@ def genACECorpusDataset(params):
         for sourceRIRFileName in glob.glob(rirFolder+"/*.wav"):
 
             params.Room = (sourceRIRFileName.split("/")[-1]).split(".")[0]
-            
+            # print(" params.Room",params.Room)
             h, rir_sr = librosa.load(sourceRIRFileName, sr=params.fs, mono=False)
             h = h.T
             print("加载一条rir的时间是:{}".format(time.time()-time_rir))
@@ -153,7 +152,7 @@ def genACECorpusDataset(params):
             time_noise = time.time()
             line1 = []
             
-            # 从15种噪音的txt中，随机抽取一个噪声文件，参与后面的数据生成
+            # 15种噪音，每种抽取一个噪音
             for txt_file in glob.glob(args.noise_dir + "/*.txt"):
                 # 之后从这个txt_file中随机选择一条
                 with open(txt_file) as read:
@@ -274,9 +273,8 @@ def genACECorpusDataset(params):
                     results["fileName"] = utterCsvFileName
 
                     params.roomCodeName =  params.Room
-                    
                     if "_" in params.roomCodeName:
-                        raise ValueError("名称不允许包含下划线！")
+                        raise ValueError("具体的rir wav名称不允许包含下划线！")
 
                     params.roomConfig = params.corpusMicConfig
                     Head,outputLine = genCorpusStdOut(results, params)
@@ -314,9 +312,8 @@ def genACECorpusDataset(params):
                 save_name_list = wave_file.split("/")[-1]
                 save_name = save_name_list.split(".")[0]
                 params.talkerCodeName = save_name
-                
                 if "_" in params.talkerCodeName:
-                    raise ValueError("名称不允许包含下划线！")
+                    raise ValueError("干语料speech名称不允许包含下划线！")
                 params.talkerName = save_name
 
 

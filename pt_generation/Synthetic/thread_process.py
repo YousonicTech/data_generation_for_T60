@@ -16,10 +16,10 @@ import threading
 import os
 import datetime
 
-MAX_THREADS = 4  # 设置最大的并行线程数为 4
-wav_root = "/data1/zdm/T60_500HZ_Data_wav/train/ZGC_3040noise/"  
-save_pt_root = "/data1/zdm/T60_500Hz_Data_pt/train/3040Noise/ZGC_3040noise/"
-csv_path_root = "/data1/zdm/T60_500HZ_Data_wav/train/ZGC_3040noise/"  
+MAX_THREADS = 8  # 设置最大的并行线程数
+wav_root = "/data3/zdm/sti_data_wav/val/Synthetic/CPEZ/"
+save_pt_root = "/data3/zdm/sti_data_pt/val/Synthetic/CPEZ/"
+csv_path_root = wav_root
 # 在执行 execCmd() 函数之前，获取 semaphore
 semaphore = threading.Semaphore(MAX_THREADS)
 
@@ -47,7 +47,15 @@ for folder_name in os.listdir(wav_root):
         csv_list.append(os.path.join(csv_path_root, folder_name, "results.csv"))
 
 if __name__ == "__main__":
-    commands = ["python OurData_GenPT.py --dir_str " + wav_list[i] + " --save_dir " + save_list[i] + " --csv_file " + csv_list[i] for i in range(len(wav_list))]
+    commands = [
+        "python OurData_GenPT.py --dir_str "
+        + wav_list[i]
+        + " --save_dir "
+        + save_list[i]
+        + " --csv_file "
+        + csv_list[i]
+        for i in range(len(wav_list))
+    ]
     threads = []
     for cmd in commands:
         th = threading.Thread(target=execCmd, args=(cmd,))

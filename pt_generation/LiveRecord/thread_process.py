@@ -13,10 +13,10 @@ import datetime
 import os
 import threading
 
-MAX_THREADS = 4  # 设置最大的并行线程数为 4
-wav_root = "/data1/zdm/T60data/val_LiveRecord/HYBL_LiveRecord/"
-save_pt_root = "/data1/zdm/T60_500Hz_Data_pt/LiveRecord/val_hybl_LiveRecord/"
-csv_path = "/data1/zdm/T60_500HZ_Data_wav/val/hybl/hybl_total.csv"  # 新传上去了
+MAX_THREADS = 8  # 设置最大的并行线程数
+wav_root = "/data1/zdm/T60data/LiveRecord/YQH_LiveRecord/"
+save_pt_root = "/data1/zdm/T60_500Hz_Data_pt/val/LiveRecord/val_YQH_LiveRecord/"
+csv_path = "/data1/zdm/T60_500Hz_Data_pt/val/LiveRecord/val_YQH_LiveRecord/YQH_total.csv" 
 semaphore = threading.Semaphore(MAX_THREADS)
 def execCmd(cmd):
     try:

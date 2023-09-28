@@ -1,5 +1,8 @@
-# 数据生成
+<div align="center">
 
+# T60 Data Generation
+
+</div>
 ## 更新日志
 2023-6-10 增加现场录音pt文件生成，增加线程控制防止占满cpu资源，调整工程结构
 
@@ -28,10 +31,10 @@
 
 注意：所有文件及文件夹名中请勿出现字符"_"，如要使用请用字符"-"替换，或采用驼峰命名法
 
-RIR文件目录格式如下
+RIR及现场录音文件目录格式如下
 
 ```
-RIR
+RIR(LiveRecord)
 ├── YanQiHu
 │   ├── room1
 │   │   ├── room1-ch1.wav
@@ -47,10 +50,10 @@ RIR
         ├── room1-ch1.wav
         └── room1-ch2.wav
 ```
+## 合成数据
+### 不含噪数据生成
 
-## 不含噪数据生成
-
-### 1. 生成wav文件
+#### 1. 生成wav文件
 
 对应`wav_generation/NoNoise`
 
@@ -83,11 +86,11 @@ RIR
 
     speech为干语料
 
-### 2. 生成pt文件
+#### 2. 生成pt文件
 
 **！！！pt文件包含的t60为30维！！！**
 
-对应`pt_generation`
+对应`pt_generation/Synthetic`
 
 2. 修改**`thread_process.py`** 28-30行的参数
 
@@ -99,9 +102,9 @@ csv_path_root： 第1步生成的{output_dir}/Dev/Speech/
 
 读取wav_root下所有房间文件夹名称，在save_pt_root下生成对应的pt，生成的pt文件格式与wav一致，后面-0表示通道
 
-## 含噪数据生成
+### 含噪数据生成
 
-### 1. 生成wav文件
+#### 1. 生成wav文件
 
 对应`wav_generation/AddNoise`
 
@@ -152,11 +155,11 @@ noise_dir：noise的txt目录
 
     SNR：信噪比
 
-### 2. 生成pt文件
+#### 2. 生成pt文件
 
 **！！！pt文件包含的t60为30维！！！**
 
-对应`pt_generation`
+对应`pt_generation/Synthetic`
 
 修改**`thread_process.py`** 28-30行的参数
 
@@ -167,6 +170,23 @@ csv_path_root： 第1步生成的{output_dir}/Dev/Speech/
 ```
 
 读取wav_root下所有房间文件夹名称，在save_pt_root下生成对应的pt，生成的pt文件格式与wav一致，后面-0表示通道
+
+## 现场录音
+对应`pt_generation/LiveRecord`
+1.运行`gen_csv.py`，参数如下：
+
+```
+xls_file：      现场录音的xls文件，如果你没有，与RIR的xls一致，文件及文件夹命名也需与RIR的相同
+output_dir：    csv输出路径，建议与pt输出路径一致
+```
+
+2.运行`thread_process.py`
+
+```
+wav_root：      现场录音wav根目录
+save_pt_root：  pt输出目录
+csv_path：      第1步输出的csv地址
+```
 
 ## TODO
 LiveRecordAddNoise

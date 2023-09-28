@@ -85,10 +85,8 @@ class Totensor(object):
         #
 csv_data = pd.read_csv(csv_file)
 
-# for wav_file_name in glob.glob(dir_str+r"/*.wav"):
-#for file_name in glob.glob("/data1/zdm/code/T60_experiment/new_CAS_YanXiHu_wav/Dev/Speech/219/219_1_219_channel2_219_output_TIMIT_0_0dB-0.wav"):
-    
 for file_name in glob.glob(dir_str + r"/*.wav"):
+    print("file_name:",file_name)
     # wav_file_name = glob.glob(dir_str + r"/*.wav")[0]
     f = wave.open(file_name, "rb")
     params = f.getparams()
@@ -122,16 +120,15 @@ for file_name in glob.glob(dir_str + r"/*.wav"):
 
         available_part_num = (audio_time - chunk_overlap) // (
                 chunk_length - chunk_overlap)  # 4*x - (x-1)*0.5 <= audio_time    x为available_part_num
-
-        if available_part_num == 1:
-            cut_parameters = [chunk_length]
+        print("cut num:",available_part_num)
+        # if available_part_num == 1:
+        #     cut_parameters = [chunk_length]
             
-        else:
-            cut_parameters = np.arange(chunk_length,
-                                       (chunk_length - chunk_overlap) * available_part_num + chunk_overlap,
-                                       chunk_length)  # np.arange()函数第一个参数为起点，第二个参数为终点，第三个参数为步长（10秒）
+        # else:
+        #     cut_parameters = np.arange(chunk_length,
+        #                                (chunk_length - chunk_overlap) * available_part_num + chunk_overlap,
+        #                                chunk_length)  # np.arange()函数第一个参数为起点，第二个参数为终点，第三个参数为步长（10秒）
 
-        print("cutcut:",cut_parameters)
         start_time = int(0)  # 开始时间设为0
         count = 0
         # 开始存储pt文件
@@ -144,9 +141,7 @@ for file_name in glob.glob(dir_str + r"/*.wav"):
         # dict_4000 = {}
         save_data = []
         
-        
-        for t in cut_parameters:
-            stop_time = int(t)  # pydub以毫秒为单位工作
+        for t in range(int(available_part_num)):
             start = int(start_time * framerate)
             end = int((start_time + chunk_length) * framerate)
             audio_chunk = audio_samples_np[start:end]  # 音频切割按开始时间到结束时间切割
@@ -154,6 +149,7 @@ for file_name in glob.glob(dir_str + r"/*.wav"):
             ##ingore chunks with no audio
             chunk_spl = SPLCal(audio_chunk)
             if whole_audio_SPL - chunk_spl >= 20:
+                start_time = start_time + chunk_length - chunk_overlap  # 开始时间变为结束时间前1s---------也就是叠加上一段音频末尾的4s
                 continue
 
             ##file naming

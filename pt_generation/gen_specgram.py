@@ -142,9 +142,10 @@ def All_Frequency_Spec(waveform, fs):
 
 if __name__ == "__main__":
     #path="/Users/bajianxiang/Desktop/internship/koli-national-park-winter_koli_snow_site4_1way_mono_1_koli-national-park-winter_粤语女声_5_TIMIT_b011_30_40_20dB.wav"
-    path = "/data2/pyq/yousonic/20230214_zky/N106/第一个点/20230214131315.wav"
+    path = "/data1/zdm/T60_500HZ_Data_wav/val/hybl_3040noise/eight-four/eight-four_eight-four-ch4_东北话男声-1_a009-90-100_30dB.wav"
     data, fs = librosa.load(path, sr=None, mono=False)
+    
     spectrograms, fs_each_band, time = Filter_Downsample_Spec(data, fs)
     # spectrograms,fs_each_band,time = All_Frequency_Spec(data,fs)
     # paint_single(spectrograms, fs_each_band, time)
-    # print(len(spectrograms))
+    print(spectrograms[0].shape)

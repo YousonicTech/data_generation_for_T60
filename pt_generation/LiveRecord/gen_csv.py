@@ -8,8 +8,8 @@ import numpy as np
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("--xls_file", default="/data1/zdm/T60data/LiveRecord/HYBL_LiveRecord/HYBL_total.xls", type=str)
-parser.add_argument("--output_dir", default="/data1/zdm/T60_500Hz_Data_pt/test/", type=str)
+parser.add_argument("--xls_file", default="/data1/zdm/T60data/LiveRecord/YQH_LiveRecord/YQH_total.xls", type=str)
+parser.add_argument("--output_dir", default="/data1/zdm/T60_500Hz_Data_pt/val/LiveRecord/val_YQH_LiveRecord/", type=str)
 # 创建解析器
 # ArgumentParser 对象包含将命令行解析成 Python 数据类型所需的全部信息。
 # path = r"C:\Users\17579\Desktop\新建文件夹\TAE_Train\Data_Aug\Step_1\test_1.csv"
@@ -17,10 +17,12 @@ parser.add_argument("--output_dir", default="/data1/zdm/T60_500Hz_Data_pt/test/"
 def excel_to_csv(file):
     resultsFileName = file.replace(".xls", '.csv')  # "02_06_val_data.csv"
     resultsFileName = os.path.join(args.output_dir, resultsFileName.split("/")[-1])
+    
     if not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir)
     resultsHandle = open(resultsFileName, "w", newline="")
     csv_writer = csv.writer(resultsHandle)
+    
     headLine = ["Test ID:", "Ver:", "fs:", "Room:", "Room Config:", "Session ID:", "Mic Pos:",
                 "Source Pos:", "Config:", "Rec Type:", "RIR:", "Freq band:", "Centre freq:",
                 "Channel:", "DRR:", "DRR Mean (Ch):", "T60 AHM:", "T30 ISO:", "T20 ISO:",

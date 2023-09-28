@@ -8,9 +8,9 @@ import numpy as np
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("--xls_file", default="/data1/zdm/T60data/VAL_RIR/HYBL_RIR/hybl_total.xls", type=str)
-parser.add_argument('--rir_dir', default="/data1/zdm/T60data/VAL_RIR/HYBL_RIR/", type=str)
-parser.add_argument("--output_dir", default="/data1/zdm/T60_500HZ_Data_wav/val/hybl_catlivespeech_nonoise/", type=str)
+parser.add_argument("--xls_file", default="/data1/zdm/T60data/RIR/ZGC_train_RIR/ZGC_total.xls", type=str)
+parser.add_argument('--rir_dir', default="/data1/zdm/T60data/RIR/ZGC_train_RIR/", type=str)
+parser.add_argument("--output_dir", default="/data3/zdm/T60_500Hz_data_wav/train/NoNoise/ZGC/", type=str)
 parser.add_argument("--gen_convwav_shell", default='./test.sh', type=str)
 parser.add_argument("--log",default="./log/",type=str)
 # 创建解析器
