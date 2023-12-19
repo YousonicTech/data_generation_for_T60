@@ -4,3 +4,4 @@
 /wav_generation/NoNoise/*.sh
 /wav_generation/AddNoise/*.sh
 /thread_wav_generation/NoNoise/log
+/thread_wav_generation/AddNoise/log
