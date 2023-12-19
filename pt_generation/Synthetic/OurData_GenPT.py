@@ -22,7 +22,7 @@ from gen_specgram import Filter_Downsample_Spec
 # 加载gc模块
 import gc
 
-chunk_length = 4
+chunk_length = 1
 chunk_overlap = 0.5
 
 #nohup python 0921_OurData_GenPT.py --dir_str /data2/hsl/0323_wav_data/add_without_zky_0316/Speech/central-hall-university-york/ --save_dir /data2/hsl/0323_pt_data/add_without_zky_0316/train/central-hall-university-york/ --csv_file /data2/hsl/0323_wav_data/add_without_zky_0316/Speech/central-hall-university-york/20230321T124743_test_gen_corpus_dataset_results.csv >> /data2/hsl/0324_central-hall-university-york.log 2>&1 &
@@ -30,7 +30,7 @@ chunk_overlap = 0.5
 parser = argparse.ArgumentParser(description='manual to this script')
 
 parser.add_argument('--csv_file', type=str,
-                    default="/data1/zdm/T60_500HZ_Data_wav/val/hybl_3040noise/eight-four/results.csv" )
+                    default="/data1/zdm/clap/wav/1K/HYBL_1K/HYBL_1K_RIR_bu.csv" )
 parser.add_argument('--dir_str', type=str,
                     default="/data1/zdm/data_test/eight-four/")
 parser.add_argument('--save_dir', type=str,

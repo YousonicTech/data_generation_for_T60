@@ -8,8 +8,8 @@ import numpy as np
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("--xls_file", default="/data1/zdm/T60data/LiveRecord/YQH_LiveRecord/YQH_total.xls", type=str)
-parser.add_argument("--output_dir", default="/data1/zdm/T60_500Hz_Data_pt/val/LiveRecord/val_YQH_LiveRecord/", type=str)
+parser.add_argument("--xls_file", default="/data1/zdm/T60data/LiveRecord/CPEZ_LiveRecord/CPEZ_total.xls", type=str)
+parser.add_argument("--output_dir", default="/data1/zdm/T60_500Hz_Data_pt/val/LiveRecord/val_CPEZ_LiveRecord/", type=str)
 # 创建解析器
 # ArgumentParser 对象包含将命令行解析成 Python 数据类型所需的全部信息。
 # path = r"C:\Users\17579\Desktop\新建文件夹\TAE_Train\Data_Aug\Step_1\test_1.csv"

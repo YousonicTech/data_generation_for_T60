@@ -1,24 +1,19 @@
 import os
 import csv
-import argparse
-import shutil
 import xlrd
-
-import numpy as np
-
-parser = argparse.ArgumentParser()
-
-parser.add_argument("--xls_file", default="/data1/zdm/RIR/total/HYBL_RIR/hybl_total.xls", type=str)
-parser.add_argument('--rir_dir', default="/data1/zdm/RIR/total/HYBL_RIR/", type=str)
-parser.add_argument("--output_dir", default="/data3/zdm/test/", type=str)
-parser.add_argument("--gen_convwav_shell", default='./test.sh', type=str)
-parser.add_argument("--log",default="./log/",type=str)
+from option import args
+import random
+import threading
+import datetime
 # 创建解析器
 # ArgumentParser 对象包含将命令行解析成 Python 数据类型所需的全部信息。
 # path = r"C:\Users\17579\Desktop\新建文件夹\TAE_Train\Data_Aug\Step_1\test_1.csv"
 
 def excel_to_csv(file):
-    resultsFileName = file.replace(".xls", '.csv')  # "02_06_val_data.csv"
+    if file.endswith(".xls"):
+        resultsFileName = file.replace(".xls", '.csv')  # "02_06_val_data.csv"
+    if file.endswith(".xlsx"):
+        resultsFileName = file.replace(".xlsx", '.csv')  # "02_06_val_data.csv"
     resultsFileName = os.path.join(args.output_dir, resultsFileName.split("/")[-1])
     if not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir)
@@ -129,11 +124,23 @@ def excel_to_csv(file):
 #     return csv
 #
 
+
+def execCmd(cmd):
+    try:
+        semaphore.acquire()  # 获取 semaphore
+        print("COMMAND -- %s -- BEGINS -- %s -- " % (cmd, datetime.datetime.now()))
+        os.system(cmd)
+        # os.system(cmd)
+        print("COMMAND -- %s -- ENDS -- %s -- " % (cmd, datetime.datetime.now()))
+    except:
+        print("Failed -- %s -- " % cmd)
+    finally:
+        semaphore.release()  # 释放 semaphore
+        
 if __name__ == "__main__":
-    args = parser.parse_args()
-    # xls_file = args.xls_file
-    # file = "./new_val_data.xls"
-    # csv_file = args.csv_file
+    MAX_THREADS = 4  # 设置最大的并行线程数
+    semaphore = threading.Semaphore(MAX_THREADS)
+    random.seed(1234)
     csv_file = excel_to_csv(args.xls_file)
     remove_lst = []
     nohup_lst = []
@@ -146,21 +153,31 @@ if __name__ == "__main__":
                 shell_str = "python main.py --CORPUS_INPUT_FOLDER_ROOT %s --CORPUS_OUTPUT_FOLDER_ROOT %s --T60DRRresultsFile %s  --need_config %s --MIC_CONFIGs %s\n" % (
                     root, args.output_dir, csv_file, room_name, room_name)
                 remove_lst.append(shell_str)
-    for x in remove_lst:
-        print(x)
 
     temp_lists = list(set(remove_lst))
+
     for i in range(len(temp_lists)):
         logdir = args.log
         if not os.path.exists(logdir):
             os.makedirs(logdir)
         log_name = temp_lists[i].split('--MIC_CONFIGs')[-1].split("\n")[0].strip() + '.log'
         log = os.path.join(logdir,log_name)
-        nohup_shell = "nohup" + " " + temp_lists[i].split('\n')[0] + " " + ">%s 2>&1 &" % (log) + "\n"
+        nohup_shell =" " + temp_lists[i].split('\n')[0] + " " + "2>&1 | tee %s " % (log) + "\n"
         nohup_lst.append(nohup_shell)
-
 
     for i in nohup_lst:
         shell_file.write(i)
     shell_file.close()
+    
+    temp_lists = list(set(remove_lst))
+    threads = []
+    for cmd in nohup_lst:
+        th = threading.Thread(target=execCmd, args=(cmd,))
+        th.start()
+        threads.append(th)
+    for th in threads:
+        th.join()
+    
     print('finished!!!')
+    
+

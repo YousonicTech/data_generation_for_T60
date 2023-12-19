@@ -29,8 +29,8 @@ parser.add_argument('--MIC_CONFIGs', default="six-eight", type=str)
 #parser.add_argument('--MIC_CONFIGs', default="Nature,Miscellaneous,Recreation,Stairwells,Underground,Underpasses,Venues", type=str)
 #parser.add_argument('--noise_dir', default="/data1/zdm/code/T60_experiment/15NoiseScenes_txt/15NoiseScenes_txt", type=str)
 
-parser.add_argument('--Speaker_root', default='/data1/zdm/CleanSpeech/speech_wav/CatChinese/', type=str)
-parser.add_argument('--Speaker_txt', default='/data1/zdm/CleanSpeech/speech_wav/CatChinese/CatChinese.txt', type=str)
+parser.add_argument('--Speaker_root', default='/data1/zdm/clap/clap_data/clap_cut_with_direct/', type=str)
+parser.add_argument('--Speaker_txt', default='/data1/zdm/clap/clap.txt', type=str)
 args = parser.parse_args()
 
 

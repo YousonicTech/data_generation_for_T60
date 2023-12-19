@@ -1,30 +1,27 @@
 import os
 import numpy as np
 import time
-from extraLib import strcmp,judgeList,v_addnoise
-import wave
-import scipy.signal as sg
+from extraLib import strcmp,v_addnoise
 from  getACECorpusData import getACECorpusData
 from  readInT60DRRSubband import readInT60DRRSubband
 from  genCorpusStdOut import genCorpusStdOut
 import librosa
-import csv
-from scipy import signal
 import soundfile as sf
 import datetime
 import csv
 import glob
 import random
 from option import args
+import sys
+sys.path.append('../')
+from utils import *
 
 random.seed(1234)
+
 def genACECorpusDataset(params):
     ACECorpusData = getACECorpusData(params.readFromServer)
     #funciton logic
-
-
     nRoomMicDists = len(params.roomMicDistRange)
-
 
     nMicConfigs = params.micConfigRange
 
@@ -43,7 +40,6 @@ def genACECorpusDataset(params):
     # REVIEW  读取T60_file
 
     T60DRRData = readInT60DRRSubband(T60DRRresultsFile)
-
 
     freqBands = np.unique(T60DRRData["freqBand"])
 
@@ -66,8 +62,6 @@ def genACECorpusDataset(params):
 
     #Do the convolving of the files
     results = {} #是为test_id创建一个字典
-
-
 
     for micConfigInd in range(params.micConfigRange):
         #Load the mic config parameters
@@ -100,7 +94,6 @@ def genACECorpusDataset(params):
         if params.startOffset == 0:
             #time.strftime("%d:%m:%Y")
             #resultsFileName = micConfigCorpusFolder+'_'+params.testName +'_results.txt'
-            dt = datetime.datetime.now()
             resultsFileName = os.path.join(micConfigCorpusFolder,"results.csv")
             print("resultFilename:",resultsFileName)
             resultsHandle = open(resultsFileName, "a", newline="")
@@ -121,25 +114,25 @@ def genACECorpusDataset(params):
 
         rirFolder = str(params.corpusInputFolderRoot)
         print("rirFolder:",rirFolder)
-        time_rir = time.time()
+        
         for sourceRIRFileName in glob.glob(rirFolder+"/*.wav"):
-
+            time_rir = time.time()
             params.Room = (sourceRIRFileName.split("/")[-1]).split(".")[0]
             # print(" params.Room",params.Room)
-            h, rir_sr = librosa.load(sourceRIRFileName, sr=params.fs, mono=False)
-            h = librosa.util.normalize(h)
-            h = h.T
+            rir_audio, rir_sr = librosa.load(sourceRIRFileName, sr=params.fs, mono=False)
+            rir_audio = librosa.util.normalize(rir_audio)
+            rir_audio = rir_audio.T
             print("加载一条rir的时间是:{}".format(time.time()-time_rir))
 
             #提取不同场景下相应的rir
             source_wav = (sourceRIRFileName.split("/")[-1]).split(".")[0]
+            
             utterCsvFileName = "Unknown" + "_" +params.corpusMicConfig+ "_" + source_wav+"_<talker>_<utter>_<noise>_<SNR>dB.wav"
             #Get the T60 and DRR information
-            if h.ndim == 1:
+            if rir_audio.ndim == 1:
                 params.nChannels = 1
             else:
-
-                _, params.nChannels = h.shape
+                _, params.nChannels = rir_audio.shape
             #-------------------------------------------------------这里插入噪音信号-----------------------------------------------------
             dict_noise = {}
             # path = "/data2/TEAM/Noise_TUT/TUT-acoustic-scenes-2017-development/evaluation_setup"
@@ -151,9 +144,9 @@ def genACECorpusDataset(params):
             #     line1 = [lines for lines in read.readlines()]
             #----我应该从15个txt文件中生成15个语音-----之后在下面中进行加载
             time_noise = time.time()
-            line1 = []
+            line1 = [] # noise list
             
-            # 15种噪音，每种抽取一个噪音
+            # ! 从15种噪音的txt中，随机抽取一个噪声文件，参与后面的数据生成
             for txt_file in glob.glob(args.noise_dir + "/*.txt"):
                 # 之后从这个txt_file中随机选择一条
                 with open(txt_file) as read:
@@ -162,9 +155,11 @@ def genACECorpusDataset(params):
                 num_line = random.randint(0, length-1)
                 line1.append(wave_list[num_line])
                 
+            if args.noise_choose_num is not None:
+                line1 = random.sample(line1, args.noise_choose_num)
             print("line1:",line1)
 
-            for f1 in line1:
+            for f1 in line1: # line1 noise
 
                 noiseFileName = f1.split('\n')[0]
                 noise, noiseFs = librosa.load(noiseFileName, sr=params.fs, mono=False)
@@ -180,7 +175,6 @@ def genACECorpusDataset(params):
 
                 if noiseChannels != params.nChannels:
                     #通道数不相等，我们可以构造相等的通道数
-
                     delt_channels = params.nChannels - noiseChannels
                     if delt_channels > 0:
                         new_noise = np.zeros((noise.shape[0],params.nChannels))
@@ -188,20 +182,18 @@ def genACECorpusDataset(params):
                         for i in range(noiseChannels,delt_channels):
                             new_noise[:,i]=noise[:,0]
                     else:
-
                         new_noise = noise[:,params.nChannels]
                         new_noise = np.expand_dims(new_noise,axis=1)
                     noiseChannels = params.nChannels
                     noise = new_noise
-
-
+                    
 
                 dict_noise[noiseFileName] = [noise, noiseFs, noiseChannels]
-            print("读取15条噪音的时间是:{}".format(time.time() - time_noise))
+            print("读取噪音的时间是:{}".format(time.time() - time_noise))
             #for chanInd in range(0,params.nChannels):
             #升到只有1到9
-            if h.ndim != 1:
-                nChannels = h.shape[1]
+            if rir_audio.ndim != 1:
+                nChannels = rir_audio.shape[1]
             else:
                 nChannels = 1
             for chanInd in range(1,nChannels+1):
@@ -292,26 +284,48 @@ def genACECorpusDataset(params):
             #我将TIMIT数据保存为了一个train.txt/test.txt，我只需遍历这个文件就行了啊！
             with open(ACECorpusData.TIMIT_TRAIN_TXT,encoding = 'gb2312') as read:
                 line2 = [lines for lines in read.readlines()]
-
-            for f2 in line2:
+                
+                if args.speaker_choose_num is not None:
+                    line2 = random.sample(line2,args.speaker_choose_num)
+            # TODO
+            for f2 in line2: # speech list
                 time_timit = time.time()
                 wave_file = f2.split("\n")[0]
 
-                Speaker_root = args.Speaker_root
-                wave_file = os.path.join(Speaker_root, wave_file)
+                speaker_root = args.speaker_root
+                wave_file = os.path.join(speaker_root, wave_file)
 
-                y, sr = librosa.load(wave_file, sr = params.fs,mono=False)
+                y, sr = librosa.load(wave_file, sr = params.fs,mono=False) # speech
                 y = librosa.util.normalize(y)
                 print("加载timit时间{}".format(time.time()-time_timit))
-                if h.ndim != 1:
-                    revUtter = np.zeros([y.shape[0], h.shape[1]])
-                    for i in range(h.shape[1]):
-                        hh = h[:, i]
+                
+                rir_audio_int = rir_audio * 32768
+                rir_audio_int = rir_audio_int.astype(dtype = np.int16)
+
+                
+                if rir_audio.ndim != 1:
+                    revUtter = np.zeros([y.shape[0], rir_audio.shape[1]])
+                    for i in range(rir_audio.shape[1]):
+                        hh = rir_audio[:, i]
                         data = np.convolve(y, hh)
                         revUtter[:, i] = data[:y.shape[0]]
                 else:
-                    revUtter = np.convolve(y, h)[:y.shape[0]]
-                    revUtter = np.expand_dims(revUtter, axis=1)
+                    if args.cut_direct is True: #切除直达声
+                        max_spl_idx = np.argmax(rir_audio)
+                        
+                        new_start_idx = max_spl_idx + 500  # 切除直达声之后的起始位置
+                        rir_audio = rir_audio[new_start_idx:]
+                    
+                    if args.time_disturb == True: # 扰动
+                        revUtter = time_disturb(y, rir_audio, args)
+                    else: #
+                        revUtter = np.convolve(y, rir_audio)
+                        max_value = np.max(revUtter)
+                        min_value = np.min(revUtter)
+                        # 归一化处理
+                        revUtter = (revUtter - min_value) / (max_value - min_value)
+                        revUtter = np.expand_dims(revUtter, axis=1)
+
                 save_name_list = wave_file.split("/")[-1]
                 save_name = save_name_list.split(".")[0]
                 params.talkerCodeName = save_name
@@ -319,8 +333,7 @@ def genACECorpusDataset(params):
                     raise ValueError("干语料speech名称不允许包含下划线！")
                 params.talkerName = save_name
 
-
-                for f3 in line1:
+                for f3 in line1: # line1 noise
 
                     noiseFileName =  f3.split('\n')[0]
 
@@ -359,7 +372,6 @@ def genACECorpusDataset(params):
                                         noisyRevUtter[:, chanInd]= v_addnoise(
                                         revUtter[:, chanInd],noise[:, chanInd], params.SNR)
                                     print("all use time:",time.time() - begin)
-
 
                             #Normalise the data to +/- 1.0
                             noisyRevUtter = noisyRevUtter / np.max(np.abs(noisyRevUtter))

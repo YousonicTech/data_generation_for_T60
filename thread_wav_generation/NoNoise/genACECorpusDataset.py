@@ -1,36 +1,33 @@
 import os
 import numpy as np
 import time
-from extraLib import strcmp,judgeList,v_addnoise
-import wave
-import scipy.signal as sg
+from extraLib import strcmp
 from  getACECorpusData import getACECorpusData
 from  readInT60DRRSubband import readInT60DRRSubband
 from  genCorpusStdOut import genCorpusStdOut
 import librosa
-import csv
-from scipy import signal
+
 import soundfile as sf
 import datetime
 import csv
 import glob
 import random
 from option import args
+import sys
+sys.path.append('../')
 
 random.seed(1234)
+
+from utils import *
+
 def genACECorpusDataset(params):
     ACECorpusData = getACECorpusData(params.readFromServer)
     #funciton logic
-
-
     nRoomMicDists = len(params.roomMicDistRange)
-
-
+    
     nMicConfigs = params.micConfigRange
 
-    nSNRs = args.SNR
-    params.snrRange=nSNRs
-    # nSNRs = len(params.snrRange)
+    nSNRs = len(params.snrRange)
     nNoises = len(params.noiseRange)
     nTalkers = len(params.talkerRange)
     nUtterTypes = len(params.utterRange)
@@ -38,7 +35,6 @@ def genACECorpusDataset(params):
     #T60DRRresultsFile = "/data2/cql/code/augu_data/test_icothief/test_icothief.csv"
 
     T60DRRresultsFile = args.T60DRRresultsFile
-
 
     # REVIEW  读取T60_file
 
@@ -49,31 +45,25 @@ def genACECorpusDataset(params):
 
     nFreqBands = len(freqBands)
 
-    speechFolder = os.path.join(params.corpusInputFolderRoot,ACECorpusData.ACE_DATA_EXT_SPEECH)
-    
-
-    # Generate the output folder root name
-    # corpusFolder = [params.corpusOutputFolderRoot,params.datasetName, '/', ACECorpusData.ACE_DATA_EXT_SPEECH]
-    # outptFolder/Dev/Speech
+    a = params.corpusOutputFolderRoot
+    b = params.datasetName
+    c = ACECorpusData.ACE_DATA_EXT_SPEECH
     # corpusFolder = os.path.join(params.corpusOutputFolderRoot,params.datasetName,ACECorpusData.ACE_DATA_EXT_SPEECH)
-    
-    corpusFolder = params.corpusOutputFolderRoot
-    
     #corpusFolder = params.corpusOutputFolderRoot+params.datasetName+'/'+ACECorpusData.ACE_DATA_EXT_SPEECH
+    corpusFolder = params.corpusOutputFolderRoot
     if not os.path.exists(corpusFolder):
-        # raise ValueEroor('Corpus root folder %s does not exist.  Creating.'%corpusFolder)
+
         os.makedirs(corpusFolder)
 
     #Do the convolving of the files
     results = {} #是为test_id创建一个字典
 
-
-
     for micConfigInd in range(params.micConfigRange):
         #Load the mic config parameters
+        
         params.corpusMicConfig = ACECorpusData.MIC_CONFIGs[micConfigInd]
         if "_" in params.corpusMicConfig:
-            raise ValueError("ROOM 名称不允许包含下划线！")
+            raise ValueError("命名不允许包含下划线")
         
         if params.corpusMicConfig != args.need_config:
             continue
@@ -93,8 +83,7 @@ def genACECorpusDataset(params):
         #Open the output file containing the meta data for each data set
         #还不清楚它为什么要创建一个这样的列表
         #表明测试了多少次吧
-        results["testID"] = 1
-        
+        results["testID"]= 1
         #Open an output file.  Deal with the condition where the job is being
         #restarted
         if params.startOffset == 0:
@@ -103,7 +92,7 @@ def genACECorpusDataset(params):
             dt = datetime.datetime.now()
             resultsFileName = os.path.join(micConfigCorpusFolder,"results.csv")
             print("resultFilename:",resultsFileName)
-            resultsHandle = open(resultsFileName, "a", newline="")
+            resultsHandle = open(resultsFileName, "a",newline="")
             csv_writer = csv.writer(resultsHandle)
 
                 #resultsHandle = csv.writer(csvfile)
@@ -114,103 +103,48 @@ def genACECorpusDataset(params):
             resultsFileName = os.path.join(micConfigCorpusFolder,"results.csv")
             print("resultFilename:",resultsFileName)
 
-            resultsHandle = open(resultsFileName, "w", newline="")
+            resultsHandle = open(resultsFileName, "w",newline="")
             csv_writer = csv.writer(resultsHandle)
             results["testID"] = results["testID"] + params.startOffset
         params.rowsTotal = nRoomMicDists * nMicConfigs * nTalkers * nUtterTypes * nNoises * nSNRs
 
         rirFolder = str(params.corpusInputFolderRoot)
-        print("rirFolder:",rirFolder)
+        #rirFolder = os.path.join(str(params.corpusInputFolderRoot),str(params.corpusMicConfig))
+        #print("rirFolder:",rirFolder)
         time_rir = time.time()
+        
         for sourceRIRFileName in glob.glob(rirFolder+"/*.wav"):
 
             params.Room = (sourceRIRFileName.split("/")[-1]).split(".")[0]
-            # print(" params.Room",params.Room)
-            h, rir_sr = librosa.load(sourceRIRFileName, sr=params.fs, mono=False)
-            h = librosa.util.normalize(h)
-            h = h.T
+            rir_audio , rir_sr = librosa.load(sourceRIRFileName, sr = params.fs,mono=False)
+            rir_audio = librosa.util.normalize(rir_audio)
+            rir_audio = rir_audio.T
             print("加载一条rir的时间是:{}".format(time.time()-time_rir))
 
             #提取不同场景下相应的rir
             source_wav = (sourceRIRFileName.split("/")[-1]).split(".")[0]
             utterCsvFileName = "Unknown" + "_" +params.corpusMicConfig+ "_" + source_wav+"_<talker>_<utter>_<noise>_<SNR>dB.wav"
             #Get the T60 and DRR information
-            if h.ndim == 1:
+            if rir_audio.ndim == 1:
                 params.nChannels = 1
             else:
 
-                _, params.nChannels = h.shape
+                _, params.nChannels = rir_audio.shape
             #-------------------------------------------------------这里插入噪音信号-----------------------------------------------------
             dict_noise = {}
-            # path = "/data2/TEAM/Noise_TUT/TUT-acoustic-scenes-2017-development/evaluation_setup"
-            # audio_root = "/data2/TEAM/Noise_TUT/TUT-acoustic-scenes-2017-development/audio"
-            # txt_file = '/data2/cql/code/augu_data/get_data/noise.txt'
-            # # with open(txt_file) as f:
-            # # 因为噪音文件太多了，一次性生成这么多噪音文件吗
-            # with open(txt_file) as read:
-            #     line1 = [lines for lines in read.readlines()]
-            #----我应该从15个txt文件中生成15个语音-----之后在下面中进行加载
-            time_noise = time.time()
-            line1 = []
-            
-            # 15种噪音，每种抽取一个噪音
-            for txt_file in glob.glob(args.noise_dir + "/*.txt"):
-                # 之后从这个txt_file中随机选择一条
-                with open(txt_file) as read:
-                    wave_list = [lines for lines in read.readlines()]
-                length = len(wave_list)
-                num_line = random.randint(0, length-1)
-                line1.append(wave_list[num_line])
-                
-            print("line1:",line1)
 
-            for f1 in line1:
-
-                noiseFileName = f1.split('\n')[0]
-                noise, noiseFs = librosa.load(noiseFileName, sr=params.fs, mono=False)
-                noise = librosa.util.normalize(noise)
-                # Acccount for the noises in Meeting_Room_2 (611)-1 which only have
-                # 4 channels for the noise recordings
-                noise = noise.T
-                if noise.ndim == 1:
-                    noiseChannels = 1
-                    noise = np.expand_dims(noise, axis=1)
-                else:
-                    _, noiseChannels = noise.shape
-
-                if noiseChannels != params.nChannels:
-                    #通道数不相等，我们可以构造相等的通道数
-
-                    delt_channels = params.nChannels - noiseChannels
-                    if delt_channels > 0:
-                        new_noise = np.zeros((noise.shape[0],params.nChannels))
-                        new_noise[:,:noiseChannels] = noise
-                        for i in range(noiseChannels,delt_channels):
-                            new_noise[:,i]=noise[:,0]
-                    else:
-
-                        new_noise = noise[:,params.nChannels]
-                        new_noise = np.expand_dims(new_noise,axis=1)
-                    noiseChannels = params.nChannels
-                    noise = new_noise
-
-
-
-                dict_noise[noiseFileName] = [noise, noiseFs, noiseChannels]
-            print("读取15条噪音的时间是:{}".format(time.time() - time_noise))
             #for chanInd in range(0,params.nChannels):
             #升到只有1到9
-            if h.ndim != 1:
-                nChannels = h.shape[1]
+            if rir_audio.ndim != 1:
+                nChannels = rir_audio.shape[1]
             else:
                 nChannels = 1
-            for chanInd in range(1,nChannels+1):
+            for chanInd in range(1, nChannels+1):
                 #% Use the original channel from the appropriate mic config from
                 # the ground truth data
                 # if strcmp(params.corpusMicConfig, ACECorpusData.REC_CONFIG_SINGLE):
                 if params.corpusMicConfig == ACECorpusData.REC_CONFIG_SINGLE:
                     channelGT = params.singleMicConfigGTChan
-
                 else:
                     channelGT = chanInd
                     #nChannels = h.shape[1]
@@ -226,6 +160,7 @@ def genACECorpusDataset(params):
                     judge1 = T60DRRData["channel"]==np.array([channelGT])
 
                     judge2 = T60DRRData["room"]==np.array(params.Room)
+                    
                     judge3 = np.array([T60DRRData["config"][i]==params.micConfigGT for i in range(len(T60DRRData["config"]))])#T60DRRData["config"]== np.array(params.micConfigGT)
                     judge4 = T60DRRData["freqBand"] == np.array([freqBandInd+1])
 
@@ -273,11 +208,12 @@ def genACECorpusDataset(params):
                         results["DRRFullbandMean"] = T60DRRData["DRRFullbandMean"][rowIndex]#23
                         results["T60FullbandMean"] = T60DRRData["T60AHMFullbandMean"][rowIndex]#27
                     results["fileName"] = utterCsvFileName
-
+                    
+                    
                     params.roomCodeName =  params.Room
                     if "_" in params.roomCodeName:
-                        raise ValueError("具体的rir wav名称不允许包含下划线！")
-
+                        raise ValueError("wav文件命名不允许包含下划线")
+                    
                     params.roomConfig = params.corpusMicConfig
                     Head,outputLine = genCorpusStdOut(results, params)
                     if Head is not None:
@@ -287,97 +223,69 @@ def genACECorpusDataset(params):
                     print('%s'%outputLine)
                     print(resultsHandle, '%s'%outputLine)
                     results["testID"] = results["testID"] + 1
-
-
             #我将TIMIT数据保存为了一个train.txt/test.txt，我只需遍历这个文件就行了啊！
             with open(ACECorpusData.TIMIT_TRAIN_TXT,encoding = 'gb2312') as read:
                 line2 = [lines for lines in read.readlines()]
-
+                if args.speaker_choose_num is not None:
+                    line2 = random.sample(line2,args.speaker_choose_num)
+                
+            # TODO
+            # line2 = random.sample(line2, 20)
             for f2 in line2:
                 time_timit = time.time()
                 wave_file = f2.split("\n")[0]
-
-                Speaker_root = args.Speaker_root
-                wave_file = os.path.join(Speaker_root, wave_file)
-
+                
+                speaker_root = args.speaker_root
+                wave_file = os.path.join(speaker_root, wave_file)
+                
                 y, sr = librosa.load(wave_file, sr = params.fs,mono=False)
                 y = librosa.util.normalize(y)
                 print("加载timit时间{}".format(time.time()-time_timit))
-                if h.ndim != 1:
-                    revUtter = np.zeros([y.shape[0], h.shape[1]])
-                    for i in range(h.shape[1]):
-                        hh = h[:, i]
+                rir_audio_int = rir_audio * 32768
+                rir_audio_int = rir_audio_int.astype(dtype=np.int16)
+
+                if rir_audio.ndim != 1:
+                    revUtter = np.zeros([y.shape[0], rir_audio.shape[1]])
+                    for i in range(rir_audio.shape[1]):
+                        hh = rir_audio[:, i]
                         data = np.convolve(y, hh)
                         revUtter[:, i] = data[:y.shape[0]]
                 else:
-                    revUtter = np.convolve(y, h)[:y.shape[0]]
-                    revUtter = np.expand_dims(revUtter, axis=1)
+                    if args.cut_direct is True: #切除直达声
+                        max_spl_idx = np.argmax(rir_audio)
+                        
+                        new_start_idx = max_spl_idx + 500  # 切除直达声之后的起始位置
+                        rir_audio = rir_audio[new_start_idx:]
+                        
+                    if args.time_disturb == True: # 扰动
+                        revUtter = time_disturb(y, rir_audio, args)
+                    else: #
+                        revUtter = np.convolve(y, rir_audio)
+                        # 假设revUtter是一个一维的numpy数组
+                        # 计算最大值和最小值
+                        max_value = np.max(revUtter)
+                        min_value = np.min(revUtter)
+                        # 归一化处理
+                        revUtter = (revUtter - min_value) / (max_value - min_value)
+                        revUtter = np.expand_dims(revUtter, axis=1)
+
                 save_name_list = wave_file.split("/")[-1]
                 save_name = save_name_list.split(".")[0]
+
                 params.talkerCodeName = save_name
                 if "_" in params.talkerCodeName:
-                    raise ValueError("干语料speech名称不允许包含下划线！")
-                params.talkerName = save_name
-
-
-                for f3 in line1:
-
-                    noiseFileName =  f3.split('\n')[0]
-
-                    params.noise = (noiseFileName.split("/")[-1]).split(".")[0]
-                    if "_" in params.noise:
-                        raise ValueError("noise名称不允许包含下划线！")
-                    
-                    [noise, noiseFs, noiseChannels] = dict_noise[noiseFileName]
-                    for snrInd in range(0,len(params.snrRange)):
-                        params.SNR = params.snrRange[snrInd]
-
-                        results["fullUtterOutFileName"] = os.path.join(micConfigCorpusFolder, '%s_%s_%s_%s_%ddB.wav'%(
+                        raise ValueError("speech命名不允许包含下划线")
+                
+                results["fullUtterOutFileName"] = os.path.join(micConfigCorpusFolder, '%s_%s_%s_N_NdB.wav'%(
                         params.corpusMicConfig,
                         params.roomCodeName,
                         params.talkerCodeName,
-                        params.noise,
-                        params.SNR))
-
-                        if not os.path.exists(results["fullUtterOutFileName"]) or params.overwriteWavFiles:
-
-                            if not params.noWriteMode:
-
-                                noisyRevUtter = np.zeros([len(revUtter), params.nChannels])
-                                # Process each channel of the signal separately
-                                for chanInd in range(params.nChannels):
-                                    #For 611-1 which only has 4 channels in the Lin8Ch noises, use the last existing
-                                    # % noise channel.  Since v_addnoise selects a random excerpt of the
-                                    #% noise, the noise will not be correlated with the other channels
-                                    lastExistingChannel = noiseChannels
-                                    begin = time.time()
-                                    if chanInd > noiseChannels:
-
-                                        noisyRevUtter[:, chanInd]= v_addnoise(
-                                        revUtter[:, chanInd], params.fs, params.SNR, '', noise[:, lastExistingChannel], params.fs)
-                                    else:
-                                        noisyRevUtter[:, chanInd]= v_addnoise(
-                                        revUtter[:, chanInd],noise[:, chanInd], params.SNR)
-                                    print("all use time:",time.time() - begin)
-
-
-                            #Normalise the data to +/- 1.0
-                            noisyRevUtter = noisyRevUtter / np.max(np.abs(noisyRevUtter))
-                            #Write out the .wav file containing the speech
-
-                            time_write = time.time()
-                            
-                            
-                            sf.write(results["fullUtterOutFileName"],noisyRevUtter,params.fs)
-                            print("写入文件用时：{}".format(time.time()-time_write))
+                        ))
+                time_write = time.time()
+                sf.write(results["fullUtterOutFileName"],revUtter,params.fs)
+                print("写入文件用时：{}".format(time.time()-time_write))
+                
         resultsHandle.close()
 
     print("finishing saving")
-
-
-
-
-
-
-
 

@@ -14,9 +14,9 @@ import os
 import threading
 
 MAX_THREADS = 8  # 设置最大的并行线程数
-wav_root = "/data1/zdm/T60data/LiveRecord/YQH_LiveRecord/"
-save_pt_root = "/data1/zdm/T60_500Hz_Data_pt/val/LiveRecord/val_YQH_LiveRecord/"
-csv_path = "/data1/zdm/T60_500Hz_Data_pt/val/LiveRecord/val_YQH_LiveRecord/YQH_total.csv" 
+wav_root = "/data1/zdm/T60data/LiveRecord/CPEZ_LiveRecord/"
+save_pt_root = "/data1/zdm/T60_500Hz_Data_pt/val/LiveRecord/val_CPEZ_LiveRecord/"
+csv_path = "/data1/zdm/T60_500Hz_Data_pt/val/LiveRecord/val_CPEZ_LiveRecord/CPEZ_total.csv" 
 semaphore = threading.Semaphore(MAX_THREADS)
 def execCmd(cmd):
     try:

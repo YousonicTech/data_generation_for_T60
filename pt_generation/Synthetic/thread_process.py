@@ -16,9 +16,9 @@ import threading
 import os
 import datetime
 
-MAX_THREADS = 8  # 设置最大的并行线程数
-wav_root = "/data3/zdm/sti_data_wav/val/Synthetic/CPEZ/"
-save_pt_root = "/data3/zdm/sti_data_pt/val/Synthetic/CPEZ/"
+MAX_THREADS = 4  # 设置最大的并行线程数
+wav_root = "/data1/zdm/clap/wav/with_direct/250/NoNoise/ZGCFX_250/"
+save_pt_root = "/data1/zdm/clap/pt/with_direct/250/NoNoise/ZGCFX_250/"
 csv_path_root = wav_root
 # 在执行 execCmd() 函数之前，获取 semaphore
 semaphore = threading.Semaphore(MAX_THREADS)

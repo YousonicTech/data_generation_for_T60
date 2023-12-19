@@ -116,6 +116,7 @@ def genACECorpusDataset(params):
 
             params.Room = (sourceRIRFileName.split("/")[-1]).split(".")[0]
             h, rir_sr = librosa.load(sourceRIRFileName, sr = params.fs,mono=False)
+            h = librosa.util.normalize(h)
             h = h.T
             print("加载一条rir的时间是:{}".format(time.time()-time_rir))
 
@@ -239,6 +240,7 @@ def genACECorpusDataset(params):
                 wave_file = os.path.join(speaker_root, wave_file)
                 
                 y, sr = librosa.load(wave_file, sr = params.fs,mono=False)
+                y = librosa.util.normalize(y)
                 print("加载timit时间{}".format(time.time()-time_timit))
                 
                 if h.ndim != 1:
@@ -248,7 +250,8 @@ def genACECorpusDataset(params):
                         data = np.convolve(y, hh)
                         revUtter[:, i] = data[:y.shape[0]]
                 else:
-                    revUtter = np.convolve(y, h)[:y.shape[0]]
+                    
+                    revUtter = np.convolve(y, h,"valid")
 
                     revUtter = np.expand_dims(revUtter, axis=1)
                 save_name_list = wave_file.split("/")[-1]
