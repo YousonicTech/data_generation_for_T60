@@ -1,6 +1,6 @@
 <div align="center">
 
-# T60 Data Generation
+# T60 Data Generation V0.3
 
 </div>
 ## 更新日志
